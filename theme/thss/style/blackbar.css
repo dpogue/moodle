@@ -1,0 +1,90 @@
+/* Pre-Header Blackbar */
+#blackbar {
+    width: 100%;
+    background: #2D2D2D;
+    background: rgba(0, 0, 0, 0.8);
+    height: 30px;
+    white-space: nowrap;
+    border-bottom: 1px solid black;
+    font-size: 13px;
+    line-height: 27px;
+    padding: 0 10px;
+    margin: 0;
+    list-style-type: none;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#blackbar .left {
+    float: left;
+    text-align: left;
+}
+
+#blackbar .right {
+    float: right;
+    text-align: right;
+}
+
+#blackbar li {
+    display: block;
+    margin: 0 1px;
+    list-style-type: none;
+    position: relative;
+}
+
+#blackbar li > a,
+#blackbar span {
+    padding: 2px 5px 0 5px;
+    display: block;
+    color: #cccccc !important;
+    text-shadow: 0 1px 0 black;
+    text-decoration: none;
+}
+
+#blackbar li > a:hover,
+#blackbar li > a:focus {
+    background: #4C4C4C;
+}
+
+#blackbar .img {
+    padding-top: 5px;
+    height: 24px;
+}
+
+#blackbar .active {
+    padding-top: 0;
+    border-top: 2px solid #66ff99;
+    color: white !important;
+    font-weight: bold;
+}
+
+#blackbar .open > a,
+#blackbar .open > a:hover,
+#blackbar .open > a:focus {
+    background: white !important;
+}
+
+#blackbar div {
+    display: none;
+    position: absolute;
+    top: 29px;
+    background: white;
+    border: 1px solid darkgrey;
+    border-top: 0 none;
+    padding: 5px;
+    text-align: left;
+}
+
+#blackbar .open div {
+    display: block;
+}
+
+#blackbar .left div {
+    left: -1px;
+}
+
+#blackbar .right div {
+    right: -1px;
+}

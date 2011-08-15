@@ -1,0 +1,215 @@
+/* Site Header */
+body>header {
+    margin: 0 auto;
+    width: 995px;
+    border-bottom: 1px solid darkgrey;
+}
+
+body>header nav {
+    margin-top: 15px;
+    position: relative;
+    left: -1px;
+}
+
+#tabbar {
+    position: static;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 996px;
+    border-bottom: 1px solid darkgray;
+}
+
+#tabbar li {
+    margin:0 0.25em 0 0; /* space between tabs */
+    padding: 1px 0 0; /* gecko: make room for overflow */
+    display: inline-block;
+    vertical-align: bottom;
+    list-style: none;
+}
+
+#tabbar a {
+    background: #f0f0f0;
+    background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#f9f9f9), to(#e3e3e3));
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:    -moz-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:     -ms-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:      -o-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:         linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: solid #a3a3a3;
+    border-width: 0 1px;
+    color: black;
+    font-weight: bold;
+    font-size: 108%;
+    position: relative;
+    text-decoration: none;
+    display: block;
+    display: inline-block;
+}
+
+#tabbar span {
+    border: solid darkgray;
+    border-width: 1px 0 0;
+    cursor: pointer;
+    padding: 0.25em .75em;
+    left: 0;
+    right: 0;
+    bottom: 0; /* protect from other orientations */
+    top: -1px; /* for 1px rounded corners */
+    position: relative;
+    font-style: normal;
+    display: block;
+    font-weight: bold;
+}
+
+/* Hover styles */
+#tabbar li:hover a,
+#tabbar li a:focus {
+    background: #e3e3e3;
+    background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#e3e3e3), to(#f9f9f9));
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    background:    -moz-linear-gradient(top, #e3e3e3, #f9f9f9);
+    background:     -ms-linear-gradient(top, #e3e3e3, #f9f9f9);
+    background:      -o-linear-gradient(top, #e3e3e3, #f9f9f9);
+    background:         linear-gradient(top, #e3e3e3, #f9f9f9);
+    outline: 0;
+    z-index: 201;
+}
+
+#tabbar li:hover span,
+#tabbar li a:focus span {
+    z-index: 201;
+}
+
+
+/* Selected Tab */
+#tabbar li.selected { 
+    margin: 0 0.25em -1px 0; /* for overlap */
+}
+
+#tabbar li.selected a,
+#tabbar li.selected a:focus, /* no focus effect for selected */
+#tabbar li.selected:hover a { /* no hover effect for selected */
+    background: #800000 none;
+    border-color: #800000;
+    color: white;
+    top: 1px;
+    z-index: 201;
+    text-shadow: rgba(0, 0, 0, .5) 0.1em 0.15em 0.5em;
+}
+
+#tabbar li.selected span {
+    padding: 0.40em 0.75em; /* raise selected tab */
+    border-color: #800000;
+}
+
+
+/* Submenus */
+#tabbar ul {
+    visibility: hidden;
+    position: absolute;
+    display: block;
+    z-index: 200;
+    background: #f9f9f9;
+    list-style-type: none;
+    width: 200px;
+    margin: 0;
+}
+
+#tabbar li:hover ul,
+#tabbar li a:focus + ul,
+#tabbar .active ul {
+    visibility: visible;
+    box-shadow: 0 10px 15px black;
+}
+
+#tabbar ul li {
+    margin: 0;
+    padding: 0;
+}
+
+#tabbar li:hover ul a,
+#tabbar li a:focus + ul a {
+    width: 200px;
+    font-size: 100%;
+    background: #f9f9f9 none;
+}
+
+#tabbar ul span {
+    border: 0 none;
+    font-weight: normal;
+}
+
+#tabbar ul li:first-child span {
+    border-top: 1px solid darkgray;
+    top: -1px;
+}
+
+#tabbar ul li:last-child span {
+    border-bottom: 1px solid darkgray;
+    top: 1px;
+}
+
+#tabbar ul a:hover,
+#tabbar ul a:focus {
+    background: #e3e3e3 !important;
+}
+
+
+/* Banner area */
+#banners {
+    float: right;
+    position: relative;
+    height: 201px;
+    background: white;
+    width: 305px;
+    border: 1px solid darkgray;
+    border-bottom: 0;
+    border-top: 0;
+    text-align: center;
+    right: -1px;
+}
+
+
+/* Slideshow area */
+#slideshow {
+    background: white;
+    background-image: url([[pix:theme|schoolbg]]);
+    border-left: 1px solid #800000;
+    margin-right: 305px;
+    height: 201px;
+    clear: left;
+    position: relative;
+    left: -1px;
+}
+
+#slideshow_current {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 201px;
+    width: 100%;
+}
+
+#slideshow p {
+    background: rgb(128, 0, 0);
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(128, 0, 0, 1.0)), to(rgba(128, 0, 0, 0.25)));
+    background: -webkit-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    background:    -moz-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    background:     -ms-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    background:      -o-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    background:         linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    position: absolute;
+    top: 0;
+    width: auto;
+    height: 191px;
+    border-bottom: 1px solid #800000;
+    color: white;
+    font-size: 123.1%;
+    text-align: center;
+    padding: 0 15px;
+    padding-top: 10px;
+    text-shadow: 0.1em 0.15em 0.5em rgba(0, 0, 0, .5);
+    max-width: 300px;
+    min-width: 200px;
+}

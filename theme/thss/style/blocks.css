@@ -1,0 +1,23 @@
+.block {
+    background: white;
+    background: rgba(255, 255, 255, 0.25);
+    border: 0 none;
+    width: 225px;
+    margin: 0 auto;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+}
+
+.block .header {
+    height: 33px;
+}
+
+.block .header h2 {
+    color: #800000;
+    font-weight: bold;
+}
+
+.block .content {
+    padding: 10px 15px 15px;
+}

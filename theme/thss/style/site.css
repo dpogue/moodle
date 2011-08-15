@@ -1,0 +1,76 @@
+/* Declaring HTML 5 elements */
+article, aside, dialog, figure, footer, header, legend, nav, section {
+    display: block;
+}
+
+/* Core */
+html {
+    background-color: #e6e0db;
+    background-image: url([[pix:theme|background]]);
+    background-repeat: repeat-x;
+    background-position: center top;
+}
+
+body {
+    background: transparent;
+    min-width: 1000px;
+}
+
+#page {
+    padding: 15px 0 0;
+    width: 100%;
+    background: transparent;
+    margin: 0 auto;
+    font-size: 100%;
+
+    display: -webkit-box;
+    display:    -moz-box;
+    display:     -ms-box;
+    display:         box;
+
+    -webkit-box-pack: justify;
+       -moz-box-pack: justify;
+        -ms-box-pack: justify;
+            box-pack: justify;
+}
+
+#leftside {
+    background: transparent;
+    margin-right: 15px;
+
+    -webkit-box-flex: 1;
+       -moz-box-flex: 1;
+        -ms-box-flex: 1;
+            box-flex: 1;
+}
+
+#rightside {
+    background: transparent;
+    margin-left: 15px;
+
+    -webkit-box-flex: 1;
+       -moz-box-flex: 1;
+        -ms-box-flex: 1;
+            box-flex: 1;
+
+    -webkit-box-ordinal-group: 3;
+       -moz-box-ordinal-group: 3;
+        -ms-box-ordinal-group: 3;
+            box-ordinal-group: 3;
+}
+
+#content {
+    background: transparent;
+    border: 0 none transparent;
+    min-height: 250px;
+
+    -webkit-box-flex: 15;
+       -moz-box-flex: 15;
+        -ms-box-flex: 15;
+            box-flex: 15;
+
+    -webkit-box-ordinal-group: 2;
+       -moz-box-ordinal-group: 2;
+        -ms-box-ordinal-group: 2;
+            box-ordinal-group: 2;
+}
