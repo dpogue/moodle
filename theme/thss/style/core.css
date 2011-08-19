@@ -111,35 +111,6 @@ border-right:none !important;
 padding-right:3px;
 }
 
-/** Some breadcrumb style **/
-div#johncontrols span.arrow.sep {
-font-size: 1px;
-color: #fafafa;
-background: url([[pix:theme|arrow-transition]]) no-repeat;
-background-position: 50% 3px;
-display: inline-block;
-width: 16px;
-line-height: 30px;
-}
-
-.breadcrumb ul {
-line-height:35px;
-}
-
-.breadcrumb li a,.breadcrumb li {
-font-weight:200;
-font-size: 12px;
-text-decoration:none;
-color:#666;
-}
-.breadcrumb a:hover {
-text-decoration: underline;
-color: black;
-}
-.breadcrumb li img {
-vertical-align:middle;
-}
-
 
 /** Container and divs for middle logo area **/
 #textcontainer-wrap {

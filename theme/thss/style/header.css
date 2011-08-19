@@ -199,6 +199,7 @@ body>header nav {
     background:     -ms-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:      -o-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:         linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#FF800000', EndColorStr='#00800000');
     position: absolute;
     top: 0;
     width: auto;
@@ -212,4 +213,67 @@ body>header nav {
     text-shadow: 0.1em 0.15em 0.5em rgba(0, 0, 0, .5);
     max-width: 300px;
     min-width: 200px;
+}
+
+
+/* Breadcrumb bar */
+#menubar {
+    background: #f0f0f0;
+    background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#f9f9f9), to(#e3e3e3));
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:    -moz-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:     -ms-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:      -o-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background:         linear-gradient(top, #f9f9f9, #e3e3e3);
+    position: relative;
+    width: 995px;
+    clear: left;
+    line-height: 27px;
+	font-size: 13px;
+    padding: 0;
+    height: 30px;
+    overflow: visible;
+}
+
+#menubar .breadcrumb {
+    position: absolute;
+    left: -1px;
+    top: 0;
+    padding-left: 10px;
+	margin: 0;
+	color: #2d2d2d;
+    border-left: 1px solid darkgrey;
+    height: 30px;
+}
+
+#menubar .breadcrumb ul {
+	padding: 0;
+	padding-top: 3px;
+	margin: 0;
+	text-indent: 0;
+	list-style: none;
+}
+
+#menubar .breadcrumb li {
+	display: inline;
+}
+
+#menubar .breadcrumb li a {
+	color: #2d2d2d;
+}
+
+#menubar .navbutton {
+    position: absolute;
+    top: 0;
+    right: -1px;
+    border-right: 1px solid darkgrey;
+    height: 30px;
+    padding-right: 10px;
+}
+
+#menubar .navbutton div,
+#menubar .navbutton form {
+	display: block;
+	margin: 0px;
+	padding: 0px;
 }

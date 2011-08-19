@@ -47,8 +47,9 @@ echo $OUTPUT->doctype() ?>
         <li class="right">
             <a class="popup img" title="Info"><img src="<?php echo $OUTPUT->pix_url('bb_info', 'theme'); ?>" alt="Info"></a>
             <div>
+                <a href="#">Terms of Service</a><br>
                 <a href="#">Privacy Policy</a><br>
-                <a href="http://moodle.org/">About Moodle</a><br>
+                <a href="http://moodle.org/about/">About Moodle</a><br>
                 <a href="#">Contributors</a>
             </div>
         </li>
@@ -149,7 +150,6 @@ echo $OUTPUT->doctype() ?>
 
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script src="http://moodle.dpogue.ca/theme/thss/flexie.js"></script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 </body>
 </html>

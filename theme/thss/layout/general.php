@@ -13,24 +13,16 @@ $custommenu = $OUTPUT->custom_menu();
 $hascustommenu = (empty($PAGE->layout_options['nocustommenu']) && !empty($custommenu));
 
 $bodyclasses = array();
-if ($showsidepre && !$showsidepost) {
-    $bodyclasses[] = 'side-pre-only';
-} else if ($showsidepost && !$showsidepre) {
-    $bodyclasses[] = 'side-post-only';
-} else if (!$showsidepost && !$showsidepre) {
-    $bodyclasses[] = 'content-only';
-}
 if ($hascustommenu) {
     $bodyclasses[] = 'has_custom_menu';
 }
 
-
-    
 echo $OUTPUT->doctype() ?>
-
-
-<html <?php echo $OUTPUT->htmlattributes() ?>>
+<!--[if IE 8]> <html class="ie8"<?php echo $OUTPUT->htmlattributes(); ?>> <![endif]-->
+<!--[if gt IE 8]><!--> <html<?php echo $OUTPUT->htmlattributes() ?>> <!--<![endif]-->
 <head>
+    <meta charset="utf-8">
+
     <title><?php echo $PAGE->title ?></title>
     <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>" />
     <?php echo $OUTPUT->standard_head_html() ?>
@@ -38,121 +30,66 @@ echo $OUTPUT->doctype() ?>
 </head>
 <body id="<?php echo $PAGE->bodyid ?>" class="<?php echo $PAGE->bodyclasses.' '.join(' ', $bodyclasses) ?>">
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
-<div id="page">
-
-<div id="header-wrap"><div id="page-header"></div>
-	<div id="header-container">
-		<div id="header">
-			
-			<div id="headleft">
-		<?php if ($hasheading) {
-		echo $PAGE->heading;
-		}
-		?>
-			</div>
-			<div id="headright">
-			<?php
-			
-			 if ($hascustommenu) { ?>
- <div id="custommenu"><?php echo $custommenu; ?></div>
-<?php } 			?>
-			</div>
-			
-		</div>
-	</div>
-</div>
-
-
-<div id="textcontainer-wrap">
-<div id="textcontainer">
-<div class="thetitle">
-<div class="innertitle">
-
- </div>
-</div>
-<div class="rightinfo">
-<?php
- echo "<div class='innerrightinfo'>";
-                    if (isloggedin())
-                    {
- 			echo ''.$OUTPUT->user_picture($USER, array('size'=>55)).'';
- 			}
- 			else {
- 			?>
- 			<img class="userpicture" src="<?php echo $CFG->wwwroot .'/theme/'. current_theme().'/pix/image.png' ?>" />
- 			<?php
- 			}
-            echo $OUTPUT->login_info();
-            echo $OUTPUT->lang_menu();
-            echo $PAGE->headingmenu;
-       		echo"<div class=\"ppin\"></div>";
-       echo "</div>";
-       ?>
-
-</div>
-</div>
-</div>
-
-<div id="ie6-container-wrap">
-	<div id="container">
-	
-	<div id="johncontrols">
-	<div class="johncontrolsleft">
-		<?php if ($hasnavbar) { ?>
-        <div class="navbar clearfix">
-            <div class="breadcrumb"> <?php echo $OUTPUT->navbar();  ?></div>
-            
-        </div>
-        <?php } ?>
-        </div>
-	
-	<div class="johncontrolsright">
-	<?php if ($hasnavbar) {
-	echo $PAGE->button;
-	}
-	?>
-	</div>
-	</div>
-	
-	<div id="page-content">
-        <div id="region-main-box">
-            <div id="region-post-box">
-            
-                <div id="region-main-wrap">
-                    <div id="region-main">
-                        <div class="region-content">
-         
-                            <?php echo core_renderer::MAIN_CONTENT_TOKEN ?>
-                        </div>
-                    </div>
-                </div>
-                
-                <?php if ($hassidepre) { ?>
-                <div id="region-pre" class="block-region">
-                    <div class="region-content">
-       
-                        <?php echo $OUTPUT->blocks_for_region('side-pre') ?>
-                    </div>
-                </div>
-                <?php } ?>
-                <?php if ($hassidepost) { ?>
-                <div id="region-post" class="block-region">
-                    <div class="region-content">
-                        <?php echo $OUTPUT->blocks_for_region('side-post') ?>
-                    </div>
-                </div>
-                <?php } ?>
-                
+    <ul id="blackbar">
+        <li class="left">
+            <a class="active" href="<?php echo $CFG->wwwroot; ?>"><?php echo $PAGE->heading; ?></a>
+        </li>
+<?php if (isloggedin()) { ?>
+        <li class="left">
+            <a href="#">My Moodle</a>
+        </li>
+<?php }
+/* LEFT SIDE LINKS                                                           */
+/* --------------------------------------------------------------------------*/
+/* RIGHT SIDE LINKS                                                          */
+        /* Rightmost link first */ ?>
+        <li class="right">
+            <a class="popup img" title="Info"><img src="<?php echo $OUTPUT->pix_url('bb_info', 'theme'); ?>" alt="Info"></a>
+            <div>
+                <a href="#">Terms of Service</a><br>
+                <a href="#">Privacy Policy</a><br>
+                <a href="http://moodle.org/about/">About Moodle</a><br>
+                <a href="#">Contributors</a>
             </div>
+        </li>
+<?php if (isloggedin()) { ?>
+        <li class="right">
+            <span><?php echo fullname($USER) ?></span>
+        </li>
+<?php } else { ?>
+        <li class="right">
+            <a href="<?php echo get_login_url(); ?>">Login</a>
+        </li>
+<?php } ?>
+    </ul>
+
+	<header>
+        <nav>
+            <?php echo $custommenu; ?>
+        </nav>
+        <div id="menubar">
+            <div class="breadcrumb"><?php echo $OUTPUT->navbar(); ?></div>
+            <div class="navbutton"><?php echo $PAGE->button; ?></div>
+        </div>
+    </header>
+
+    <div id="page">
+        <div id="content">
+            <?php echo core_renderer::MAIN_CONTENT_TOKEN ?>
+        </div>
+        <div id="leftside">
+<?php if ($hassidepre) {
+            echo $OUTPUT->blocks_for_region('side-pre');
+} ?>
+        </div>
+        <div id="rightside">
+<?php if ($hassidepost) {
+            echo $OUTPUT->blocks_for_region('side-post');
+} ?>
         </div>
     </div>
-      
-	
-	<!-- Containers end -->
-	<div class="johnclear"></div>
-	</div>
-</div>
-	
+
+<div>
 
 <!-- START OF FOOTER -->
 <div id="footer-wrap"><div id="page-footer"></div>
@@ -189,6 +126,7 @@ echo $OUTPUT->doctype() ?>
 
 
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 </body>
 </html>

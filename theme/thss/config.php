@@ -149,7 +149,7 @@ $THEME->layouts = array(
 // media player for the filters
 ////////////////////////////////////////////////////
 
-// $THEME->javascripts	
+$THEME->javascripts	= array('modernizr');
 
 ////////////////////////////////////////////////////
 // An array containing the names of JavaScript files
@@ -157,7 +157,7 @@ $THEME->layouts = array(
 // (gets included in the head)
 ////////////////////////////////////////////////////
 
-$THEME->javascripts_footer = array('blackbar', 'slideshow');
+$THEME->javascripts_footer = array('flexie', 'blackbar', 'slideshow');
 
 ////////////////////////////////////////////////////
 // As above but will be included in the page footer.
