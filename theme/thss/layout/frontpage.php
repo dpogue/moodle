@@ -1,4 +1,6 @@
 <?php
+require_once($CFG->libdir.'/../message/lib.php');
+
 $hasheading = ($PAGE->heading);
 $hasnavbar = (empty($PAGE->layout_options['nonavbar']) && $PAGE->has_navbar());
 $hasfooter = (empty($PAGE->layout_options['nofooter']));
@@ -27,17 +29,16 @@ echo $OUTPUT->doctype() ?>
     <title><?php echo $PAGE->title ?></title>
     <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>" />
     <?php echo $OUTPUT->standard_head_html() ?>
-
 </head>
 <body id="<?php echo $PAGE->bodyid ?>" class="<?php echo $PAGE->bodyclasses.' '.join(' ', $bodyclasses) ?>">
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
     <ul id="blackbar">
         <li class="left">
-            <a class="active" href="<?php echo $CFG->wwwroot; ?>"><?php echo $PAGE->heading; ?></a>
+            <a class="active" href="<?php echo $CFG->wwwroot; ?>"><?php echo $SITE->fullname; ?></a>
         </li>
 <?php if (isloggedin()) { ?>
         <li class="left">
-            <a href="#">My Moodle</a>
+            <a href="<?php echo $CFG->wwwroot.'/my/'; ?>">My Moodle</a>
         </li>
 <?php }
 /* LEFT SIDE LINKS                                                           */
@@ -55,6 +56,14 @@ echo $OUTPUT->doctype() ?>
         </li>
 <?php if (isloggedin()) { ?>
         <li class="right">
+<?php $notify_count = message_count_unread_messages($USER); ?>
+            <a class="popup" title="Notifications"><b class="notify<?php echo $notify_count === 0 ? '' : '-unread'; ?>"><?php echo $notify_count; ?></b></a>
+            <div>
+                You have <?php echo $notify_count; ?> notifications.
+                <?php message_print_recent_messages_table(message_get_recent_notifications($USER, 0, 10), $USER); ?>
+            </div>
+        </li>
+        <li class="right">
             <span><?php echo fullname($USER) ?></span>
         </li>
 <?php } else { ?>
@@ -69,6 +78,33 @@ echo $OUTPUT->doctype() ?>
             <?php echo $custommenu; ?>
         </nav>
         <div id="banners">
+<!--[if lt IE 9]>
+            <object width="290" height="130">
+                <param name="movie" value="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" />
+                <embed src="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" type="application/x-shockwave-flash" width="290" height="130" />
+            </object>
+<![endif]--><!--[if gte IE 9]><!-->
+            <svg height="100px" width="64px" viewBox="0 0 64 100" preserveAspectRatio="xMidYMid meet">
+                <g>
+                    <text text-anchor="middle" dominant-baseline="middle" x="32" y="5" font-weight="bold">Wind:</text>
+                    <text id="windspeed" text-anchor="middle" dominant-baseline="middle" x="32" y="20">&mdash; km/h</text>
+                    <circle cx="32" cy="64" r="30" fill="#dddddd" />
+                    <text id="winddir" text-anchor="middle" dominant-baseline="middle" x="32" y="64">&hellip;</text>
+                    <g id="winddirrot" transform="rotate(0, 32, 64)">
+                        <polygon points="32,40 25,32 39,32" fill="#800000" />
+                    </g>
+                </g>
+            </svg>
+            <h3>Current Conditions</h3>
+            <span>Temperature:</span>           <b id="temperature">&mdash; &deg;C</b><br><br>
+            <span>Relative Humidity:</span>     <b id="humidity">&mdash;%</b><br>
+            <span>Daily Precipitation:</span>   <b id="precip_daily">&mdash; mm</b><br>
+            <span>Hourly Precipitation:</span>  <b id="precip_hourly">&mdash; mm</b><br>
+            <span>Air Pressure:</span>          <b id="pressure">&mdash; mb</b><br>
+            <span>UV Index:</span>              <b id="uv_index">&mdash;</b><br>
+            <span>Dewpoint:</span>              <b id="dewpoint">&mdash; &deg;C</b><br><br>
+<!--<![endif]-->
+            <a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IBCMAPLE3">Weather data is available on Wunderground &raquo;</a>
         </div>
 		<div id="slideshow">
 <?php
@@ -150,6 +186,13 @@ echo $OUTPUT->doctype() ?>
 
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+    if (!Modernizr.flexbox) {
+        Modernizr.load({
+            load: '<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/flexie.min.js'
+        });
+    }
+</script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 </body>
 </html>

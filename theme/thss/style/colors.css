@@ -11,11 +11,6 @@ color:[[setting:linkhover]];
 }
 
 /** Header, footer and container wraps **/
-#header-wrap {
-/** og color #0e53a7 **/
-background:[[setting:maincolor]] url([[pix:theme|tbar3]]) repeat-x;
-border-bottom:1px solid [[setting:maincolor]];
-}
 
 /** og color #4284d3 **/
 #textcontainer-wrap {
@@ -36,7 +31,7 @@ border-top:1px solid [[setting:maincoloraccent]];
 /** og color #a63c00 **/
 /** Main heading styles **/
 #region-main-mask .title h2, h2.headingblock,h2.main,h3.main,h2.main a, div.tabtree li a span {
-color:[[setting:headingcolor]];
+color: #800000;
 }
 
 /** og color #a68100 **/
@@ -48,27 +43,16 @@ color:[[setting:blockcolor]] !important;
 /** og color #a63c00 **/
 /** Table Header **/
 table.rolecap .header,.generaltable .header,.forumheaderlist .header,.files .header,.editcourse .header,.logtable .header,#attempts .header,table#categoryquestions th {
-background:[[setting:headingcolor]] url([[pix:theme|alert-overlay]]) repeat-x;
+background: #800000;
+font-weight: bold;
 color:#fff !important;
-}
-
-/** Button Color **/
- div.block_private_files.block button, .adminsearchform input[type="submit"], #searchform_button, .johncontrolsright input[type="submit"],div.forumaddnew input[type="submit"], #container2 input[type="button"] {
-background:#dfdfdf url([[pix:theme|alert-overlay]]) repeat-x;
-color:#333;
-}
-
-/** og color #a63c00 **/
-div.block_private_files.block button:hover, .adminsearchform input[type="submit"]:hover, #searchform_button:hover, .johncontrolsright input[type="submit"]:hover, div.forumaddnew input[type="submit"]:hover {
-background:[[setting:headingcolor]] url([[pix:theme|alert-overlay]]) repeat-x;
-color:#fff;
 }
 
 
 /** og color #ffe073 **/
 /** Forum post colors **/
 .forumpost .topic {
-background:[[setting:forumback]] url([[pix:theme|alert-overlay]]) repeat-x;
+background: #66ffcc;
 }
 
 /** og color #04346c **/
@@ -79,13 +63,13 @@ color:[[setting:forumcolor]];
 /** og color #04346c **/
 /** Calendar Color **/
 .calendarmonth.calendartable th {
-background:[[setting:forumcolor]] url([[pix:theme|alert-overlay]]) repeat-x !important;
+background:[[setting:forumcolor]] !important;
 color:#fff;
 }
 
 /** og color #0e53a7 **/
 #dock {
-background:[[setting:maincolor]] url([[pix:theme|tbarDOCK]]) repeat-y;
+background:[[setting:maincolor]];
 border-right: 1px solid [[setting:maincolor]];
 }
 /** og color #0e53a7 **/

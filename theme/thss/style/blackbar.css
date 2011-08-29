@@ -55,7 +55,7 @@
 
 #blackbar .active {
     padding-top: 0;
-    border-top: 2px solid #66ff99;
+    border-top: 2px solid #66ffcc;
     color: white !important;
     font-weight: bold;
 }
@@ -66,7 +66,7 @@
     background: white !important;
 }
 
-#blackbar div {
+#blackbar li > div {
     display: none;
     position: absolute;
     top: 29px;
@@ -77,14 +77,32 @@
     text-align: left;
 }
 
-#blackbar .open div {
+#blackbar .open > div {
     display: block;
 }
 
-#blackbar .left div {
+#blackbar .left > div {
     left: -1px;
 }
 
-#blackbar .right div {
+#blackbar .right > div {
     right: -1px;
+}
+
+.notify,
+.notify-unread {
+    background: #606060;
+    border-radius: 3px;
+    width: 23px;
+    height: 23px;
+    line-height: 23px;
+    text-align: center;
+    display: inline-block;
+    *zoom: 1;
+    *display: inline;
+}
+
+.notify-unread {
+    background: #C00000;
+    color: white;
 }

@@ -1,4 +1,8 @@
 function slideshow_next() {
+    if (document.hidden || document.webkitHidden) {
+        return;
+    }
+
     var ss = $('#slideshow_current');
     var i = parseInt(ss.attr('data-slideshow-index'));
 

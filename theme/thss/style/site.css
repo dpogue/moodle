@@ -1,7 +1,8 @@
-/* Declaring HTML 5 elements */
-article, aside, dialog, figure, footer, header, legend, nav, section {
-    display: block;
-}
+/* HTML 5 stuff: We totally ♥ Paul Irish & the HTML5 Boilerplate */
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+audio:not([controls]) { display: none; }
+[hidden] { display: none; }
 
 /* Core */
 html {
@@ -9,6 +10,7 @@ html {
     background-image: url([[pix:theme|background]]);
     background-repeat: repeat-x;
     background-position: center top;
+    overflow-y: scroll; /* Force a scrollbar so there's no page jumps */
 }
 
 body {
@@ -63,6 +65,7 @@ body {
     background: transparent;
     border: 0 none transparent;
     min-height: 250px;
+    width: 50%;
 
     -webkit-box-flex: 15;
        -moz-box-flex: 15;
@@ -73,4 +76,75 @@ body {
        -moz-box-ordinal-group: 2;
         -ms-box-ordinal-group: 2;
             box-ordinal-group: 2;
+}
+
+.pagelayout-login .loginpanel {
+    width: 800px;
+    margin: 0 auto;
+    background: white;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid #dddddd;
+}
+
+/* Get rid of stupid Skype phone number button styles */
+span.skype_pnh_container {display:none !important;}
+span.skype_pnh_print_container {display:inline !important;}
+
+/* Google Button Styles */
+button, input[type=button], input[type=submit], input[type=reset], .button {
+    position: relative;
+    display: -moz-inline-block;
+    display: inline-block;
+
+    margin: 0 2px;
+    padding: 3px 6px;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    cursor: default;
+    outline: none;
+    font-family: Arial, sans-serif;
+    font-size: 100%;
+    line-height: normal;
+    color: black;
+    border: 1px solid #bbbbbb;
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+
+    background: #f0f0f0;
+    background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#f9f9f9), to(#e3e3e3));
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background: -moz-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background: -ms-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background: -o-linear-gradient(top, #f9f9f9, #e3e3e3);
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+}
+
+button::-moz-focus-inner, input[type=button]::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, .button::-moz-focus-inner {
+    border: 0 none !important;
+    padding: 0 !important;
+}
+
+button:hover, input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover, .button:hover {
+    border-color: #939393 !important;
+}
+
+button:focus, input[type=button]:focus, input[type=submit]:focus, input[type=reset]:focus, .button:focus {
+    border-color: #444444;
 }

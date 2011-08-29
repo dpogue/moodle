@@ -47,13 +47,14 @@ class theme_thss_core_renderer extends core_renderer {
      */
     public function htmlattributes() {
         $direction = '';
-        if ($dir) {
+        /*if ($dir) {
             if (right_to_left()) {
                 $direction = ' dir="rtl"';
             } else {
                 $direction = ' dir="ltr"';
             }
-        }
+        }*/
+
         //Accessibility: added the 'lang' attribute to $direction, used in theme <html> tag.
         $language = str_replace('_', '-', current_language());
         @header('Content-Language: '.$language);

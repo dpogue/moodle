@@ -32,11 +32,11 @@ echo $OUTPUT->doctype() ?>
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
     <ul id="blackbar">
         <li class="left">
-            <a class="active" href="<?php echo $CFG->wwwroot; ?>"><?php echo $PAGE->heading; ?></a>
+            <a href="<?php echo $CFG->wwwroot; ?>"><?php echo $SITE->fullname; ?></a>
         </li>
 <?php if (isloggedin()) { ?>
         <li class="left">
-            <a href="#">My Moodle</a>
+        <a href="<?php echo $CFG->wwwroot.'/my/'; ?>">My Moodle</a>
         </li>
 <?php }
 /* LEFT SIDE LINKS                                                           */
@@ -127,6 +127,13 @@ echo $OUTPUT->doctype() ?>
 
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+    if (!Modernizr.flexbox) {
+        Modernizr.load({
+            load: '<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/flexie.min.js'
+        });
+    }
+</script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 </body>
 </html>

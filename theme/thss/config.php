@@ -134,7 +134,7 @@ $THEME->layouts = array(
 // specific page.
 ///////////////////////////////////////////////////////////////
 
-//$THEME->csspostprocess = 'simplespace_process_css';
+$THEME->csspostprocess = 'thss_process_css';
 	
 ////////////////////////////////////////////////////
 // Allows the user to provide the name of a function 
@@ -157,7 +157,7 @@ $THEME->javascripts	= array('modernizr');
 // (gets included in the head)
 ////////////////////////////////////////////////////
 
-$THEME->javascripts_footer = array('flexie', 'blackbar', 'slideshow');
+$THEME->javascripts_footer = array('blackbar.min', 'slideshow.min', 'weather');
 
 ////////////////////////////////////////////////////
 // As above but will be included in the page footer.
@@ -203,9 +203,8 @@ $THEME->javascripts_footer = array('flexie', 'blackbar', 'slideshow');
 // include.
 ////////////////////////////////////////////////////
 
-// $THEME->renderfactory
-//$THEME->rendererfactory = 'theme_simplespace_renderer_factory';
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
+
 ////////////////////////////////////////////////////
 // Sets a custom render factory to use with the 
 // theme, used when working with custom renderers.
@@ -216,4 +215,3 @@ $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 ////////////////////////////////////////////////////
 // Controls the colours for the MP3 player 	
 ////////////////////////////////////////////////////
-$THEME->csspostprocess = 'simplespace_process_css';

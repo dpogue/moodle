@@ -43,8 +43,9 @@ body>header nav {
     font-size: 108%;
     position: relative;
     text-decoration: none;
-    display: block;
     display: inline-block;
+    *zoom: 1;
+    *display: inline;
 }
 
 #tabbar span {
@@ -166,8 +167,32 @@ body>header nav {
     border: 1px solid darkgray;
     border-bottom: 0;
     border-top: 0;
-    text-align: center;
     right: -1px;
+}
+
+#banners svg {
+    float: right;
+    margin-right: 10px;
+    margin-top: 35px;
+}
+
+#banners h3 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 5px 10px;
+}
+
+#banners span {
+    text-align: right;
+    display: inline-block;
+    width: 135px;
+    margin-right: 5px;
+}
+
+#banners a {
+    width: 305px;
+    display: block;
+    text-align: center;
 }
 
 
@@ -192,14 +217,13 @@ body>header nav {
 }
 
 #slideshow p {
-    background: rgb(128, 0, 0);
     background: -webkit-gradient(linear, left top, left bottom, from(rgba(128, 0, 0, 1.0)), to(rgba(128, 0, 0, 0.25)));
     background: -webkit-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:    -moz-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:     -ms-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:      -o-linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
     background:         linear-gradient(top, rgba(128, 0, 0, 1.0), rgba(128, 0, 0, 0.25));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#FF800000', EndColorStr='#00800000');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#FF800000', EndColorStr='#40800000');
     position: absolute;
     top: 0;
     width: auto;

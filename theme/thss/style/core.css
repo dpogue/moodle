@@ -102,7 +102,6 @@ padding:0 9px;
 }
 
 #navigation li a:hover {
-background:url([[pix:theme|alert-overlay]]) repeat-x;
 color:#fff;
 }
 
@@ -278,10 +277,6 @@ border:1px solid #aaaaaa;
 }
 .block div.block_action {
 line-height: 10px;
-}
-.block div.block_action input {
-background:#ccc url([[pix:theme|bback]]) repeat-x;
-
 }
 
 .headselect {
@@ -693,21 +688,6 @@ border:13px solid #fff;
 border-bottom:35px solid #fff;
 }
 
-/** button styles **/
- div.block_private_files.block button, .adminsearchform input[type="submit"], #searchform_button, .johncontrolsright input[type="submit"],div.forumaddnew input[type="submit"], #container2 input[type="button"] {
-display:inline-block;
-text-decoration:none;
-position:relative;
-cursor:pointer;
-border:1px solid #ccc;
-border-left:1px solid #dadada;
-border-top:1px solid #dadada;
-font-size:10px;
-padding:4px 7px 3px;
-}
-div.block_private_files.block button{
-padding:2px 4px 2px;
-}
 
 /** Tab Style **/
 div.tabtree {
@@ -947,7 +927,6 @@ padding-left:16px;
 }
 
 .yui3-menu-content li:hover {
-background:url([[pix:theme|alert-overlay]]) repeat-x !important;
 color:#fff !important;
 }
 
@@ -1008,9 +987,6 @@ padding-top: 0px;
 div.dockeditem_container div.dockeditem{
 color: #fff;
 border: none;
-}
-div.dockeditem_container div.dockeditem:hover {
-background: url([[pix:theme|alert-overlay]]) repeat-x;
 }
 div.dockeditem_container.firstdockitem {
 border-top: none;

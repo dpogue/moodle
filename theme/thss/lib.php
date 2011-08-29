@@ -7,7 +7,7 @@
  * @param theme_config $theme
  * @return string 
  */
-function simplespace_process_css($css, $theme) {
+function thss_process_css($css, $theme) {
 
     // Set the link color
     if (!empty($theme->settings->linkcolor)) {
@@ -15,7 +15,7 @@ function simplespace_process_css($css, $theme) {
     } else {
         $linkcolor = null;
     }
-    $css = simplespace_set_linkcolor($css, $linkcolor);
+    $css = thss_set_linkcolor($css, $linkcolor);
 
 // Set the link hover color
     if (!empty($theme->settings->linkhover)) {
@@ -23,7 +23,7 @@ function simplespace_process_css($css, $theme) {
     } else {
         $linkhover = null;
     }
-    $css = simplespace_set_linkhover($css, $linkhover);
+    $css = thss_set_linkhover($css, $linkhover);
     
     // Set the main color
     if (!empty($theme->settings->maincolor)) {
@@ -31,7 +31,7 @@ function simplespace_process_css($css, $theme) {
     } else {
         $maincolor = null;
     }
-    $css = simplespace_set_maincolor($css, $maincolor);
+    $css = thss_set_maincolor($css, $maincolor);
     
     // Set the main accent color
     if (!empty($theme->settings->maincoloraccent)) {
@@ -39,23 +39,15 @@ function simplespace_process_css($css, $theme) {
     } else {
         $maincoloraccent = null;
     }
-    $css = simplespace_set_maincoloraccent($css, $maincoloraccent);
+    $css = thss_set_maincoloraccent($css, $maincoloraccent);
    
-   // Set the main headings color
-    if (!empty($theme->settings->headingcolor)) {
-        $headingcolor = $theme->settings->headingcolor;
-    } else {
-        $headingcolor = null;
-    }
-    $css = simplespace_set_headingcolor($css, $headingcolor);
-    
     // Set the block headings color
     if (!empty($theme->settings->blockcolor)) {
         $blockcolor = $theme->settings->blockcolor;
     } else {
         $blockcolor = null;
     }
-    $css = simplespace_set_blockcolor($css, $blockcolor);
+    $css = thss_set_blockcolor($css, $blockcolor);
     
     // Set the forum background color
     if (!empty($theme->settings->forumback)) {
@@ -63,7 +55,7 @@ function simplespace_process_css($css, $theme) {
     } else {
         $forumback = null;
     }
-    $css = simplespace_set_forumback($css, $forumback);
+    $css = thss_set_forumback($css, $forumback);
     
       // Set the forum subject font color color
     if (!empty($theme->settings->forumcolor)) {
@@ -71,25 +63,8 @@ function simplespace_process_css($css, $theme) {
     } else {
         $forumcolor = null;
     }
-    $css = simplespace_set_forumcolor($css, $forumcolor);
+    $css = thss_set_forumcolor($css, $forumcolor);
     
-     // Set the body background image
-    if (!empty($theme->settings->background)) {
-        $background = $theme->settings->background;
-    } else {
-        $background = null;
-    }
-    $css = simplespace_set_background($css, $background);
-    
-     // Set the logo image
-    if (!empty($theme->settings->logo)) {
-        $logo = $theme->settings->logo;
-    } else {
-        $logo = null;
-    }
-    $css = simplespace_set_logo($css, $logo);
-    
-
     // Return the CSS
     return $css;
 }
@@ -100,7 +75,7 @@ function simplespace_process_css($css, $theme) {
  * Sets the link color variable in CSS
  *
  */
-function simplespace_set_linkcolor($css, $linkcolor) {
+function thss_set_linkcolor($css, $linkcolor) {
     $tag = '[[setting:linkcolor]]';
     $replacement = $linkcolor;
     if (is_null($replacement)) {
@@ -110,7 +85,7 @@ function simplespace_set_linkcolor($css, $linkcolor) {
     return $css;
 }
 
-function simplespace_set_linkhover($css, $linkhover) {
+function thss_set_linkhover($css, $linkhover) {
     $tag = '[[setting:linkhover]]';
     $replacement = $linkhover;
     if (is_null($replacement)) {
@@ -120,7 +95,7 @@ function simplespace_set_linkhover($css, $linkhover) {
     return $css;
 }
 
-function simplespace_set_maincolor($css, $maincolor) {
+function thss_set_maincolor($css, $maincolor) {
     $tag = '[[setting:maincolor]]';
     $replacement = $maincolor;
     if (is_null($replacement)) {
@@ -130,7 +105,7 @@ function simplespace_set_maincolor($css, $maincolor) {
     return $css;
 }
 
-function simplespace_set_blockcolor($css, $blockcolor) {
+function thss_set_blockcolor($css, $blockcolor) {
     $tag = '[[setting:blockcolor]]';
     $replacement = $blockcolor;
     if (is_null($replacement)) {
@@ -140,7 +115,7 @@ function simplespace_set_blockcolor($css, $blockcolor) {
     return $css;
 }
 
-function simplespace_set_maincoloraccent($css, $maincoloraccent) {
+function thss_set_maincoloraccent($css, $maincoloraccent) {
     $tag = '[[setting:maincoloraccent]]';
     $replacement = $maincoloraccent;
     if (is_null($replacement)) {
@@ -150,17 +125,7 @@ function simplespace_set_maincoloraccent($css, $maincoloraccent) {
     return $css;
 }
 
-function simplespace_set_headingcolor($css, $headingcolor) {
-    $tag = '[[setting:headingcolor]]';
-    $replacement = $headingcolor;
-    if (is_null($replacement)) {
-        $replacement = '#a63c00';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function simplespace_set_forumback($css, $forumback) {
+function thss_set_forumback($css, $forumback) {
     $tag = '[[setting:forumback]]';
     $replacement = $forumback;
     if (is_null($replacement)) {
@@ -170,7 +135,7 @@ function simplespace_set_forumback($css, $forumback) {
     return $css;
 }
 
-function simplespace_set_forumcolor($css, $forumcolor) {
+function thss_set_forumcolor($css, $forumcolor) {
     $tag = '[[setting:forumcolor]]';
     $replacement = $forumcolor;
     if (is_null($replacement)) {
@@ -178,26 +143,4 @@ function simplespace_set_forumcolor($css, $forumcolor) {
     }
     $css = str_replace($tag, $replacement, $css);
     return $css;
-}
-
-function simplespace_set_background($css, $background) {
- global $OUTPUT;
- $tag = '[[setting:background]]';
- $replacement = $background;
- if (is_null($replacement)) {
- $replacement = $OUTPUT->pix_url('backg2', 'theme');
- }
- $css = str_replace($tag, $replacement, $css);
- return $css;
-}
-
-function simplespace_set_logo($css, $logo) {
- global $OUTPUT;
- $tag = '[[setting:logo]]';
- $replacement = $logo;
- if (is_null($replacement)) {
- $replacement = $OUTPUT->pix_url('logo', 'theme');
- }
- $css = str_replace($tag, $replacement, $css);
- return $css;
 }
