@@ -63,7 +63,7 @@ echo $OUTPUT->doctype() ?>
 <?php } ?>
     </ul>
 
-	<header>
+	<header id="page-header">
         <nav>
             <?php echo $custommenu; ?>
         </nav>
