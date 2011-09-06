@@ -22,7 +22,7 @@ $THEME->parents_exclude_sheets = array('base'=>array('pagelayout'),'canvas'=>arr
 
 
 $THEME->sheets = array('layout','core','colors',
-                        'site', 'blackbar', 'header', 'blocks');
+                        'site', 'blackbar', 'header', 'blocks', 'footer');
 
 ////////////////////////////////////////////////////
 // Name of the stylesheet(s) you've including in 

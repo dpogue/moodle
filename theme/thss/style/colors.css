@@ -23,10 +23,6 @@ background:url([[setting:logo]]) no-repeat;
 background-position:0 45%;
 }
 
-/** og color #0e53a7 **/
-#footer-container {
-border-top:1px solid [[setting:maincoloraccent]];
-}
 
 /** og color #a63c00 **/
 /** Main heading styles **/
