@@ -25,91 +25,6 @@ outline:0;
 	float: none;
 }
 
-#page-content {
-clear:both;
-float:left;
-position:relative;
-width:100%;
-overflow:hidden;
-margin-top:-1px;
-padding-top:0;
-}
-
-
-/** header divs and style -color in color.css **/
-#header-wrap {
-top:0;
-left:0;
-width:100%;
-}
-#header-container {
-height:35px;
-background:none;
-}
-
-#header {
-width:90%;
-min-width:600px;
-height:35px;
-margin:0 auto;
-}
-
-#header.singleh {
-min-width:400px;
-}
-
-#headright {
-float:right;
-font-size:11px;
-font-weight:200;
-margin-top:0;
-padding-top:0;
-min-width:380px;
-}
-
-#headleft {
-float:left;
-height:35px;
-margin-left:5px;
-line-height: 35px;
-font-size: 12px;
-color: #fff;
-}
-
-/** header menu options **/
-#navigation {
-list-style-type:none;
-height:35px;
-overflow:hidden;
-}
-
-#navigation li {
-float:right;
-height:35px;
-list-style-type:none;
-text-transform:uppercase;
-}
-
-#navigation li a:link,#navigation li a:visited {
-text-decoration:none;
-display:block;
-height:35px;
-color:#fff;
-line-height:35px;
-font-size:12px;
-font-weight:200;
-padding:0 9px;
-}
-
-#navigation li a:hover {
-color:#fff;
-}
-
-#navigation li.menulast,#navigation li.menulast a {
-border-right:none !important;
-padding-right:3px;
-}
-
 
 /** Container and divs for middle logo area **/
 #textcontainer-wrap {
@@ -204,49 +119,6 @@ position:relative;
 min-height:600px;
 margin:0 auto;
 padding:0;
-}
-
-/** Footer divs and wrap **/
-#footer {
-width:90%;
-padding-left:4px;
-padding-right:4px;
-height:40px;
-position:relative;
-margin:0 auto;
-}
-
-#footer-wrap {
-position:relative;
-bottom:0;
-left:0;
-width:100%;
-}
-
-#footer-container {
-height:40px;
-}
-
-.johndocs {
-float:right;
-height:15px;
-font-size:8px;
-margin-top:10px;
-margin-right:3px;
-}
-
-.johndocs a {
-font-weight:200;
-text-decoration:none;
-}
-
-.johndocsleft {
-float:left;
-height:15px;
-font-size:8px;
-margin-top:10px;
-margin-left:3px;
-width:200px;
 }
 
 /** Main heading styles **/
@@ -908,98 +780,6 @@ table.glossarypost td.entry h3 {
 font-size:20px;
 }
 
-/**moodle dropdown css for yui menu **/
-#custommenu {
-font:79% "Helvetica Neue",Arial,Helvetica,sans-serif !important;
-text-transform:uppercase;
-font-size:11px;
-font-weight:200;
-border:none !important;
-height:35px;
-overflow:hidden;
-}
-.yui3-menu-content li, .yui3-menu-content li a, .yui3-menu-content, #custommenu, .yui3-menu.yui3-menu-horizontal, .yui3-menu.yui3-menu-horizontal ul {
-	background-color: none !important;
-	background-image: none !important;
-	background: none !important;
-}
-
-div.yui3-menu.yui3-menu-horizontal {
-float: right;
-}
-.yui3-menu-content {
-border:none !important;
-}
-
-.yui3-menu-content li a {
-color:#fff !important;
-font-size:12px;
-line-height:35px;
-cursor:pointer;
-}
-
-.yui3-menu-horizontal .yui3-menu-label {
-padding-left:16px;
-
-}
-
-.yui3-menu-horizontal .yui3-menu-label:hover {
-
-}
-
-.yui3-menu-content li:hover {
-color:#fff !important;
-}
-
-div.yui3-menu.custom_menu_submenu {
-background:url([[pix:theme|yuiarrow]]) no-repeat;
-background-position:20% 0;
-border:none;
-min-width:100px;
-z-index:99998;
-}
-
-div.yui3-menu.custom_menu_submenu div.yui3-menu.custom_menu_submenu {
-background:none !important;
-min-width:100px;
-}
-
-div.yui3-menu.custom_menu_submenu div.yui3-menu-content {
-margin-top:20px;
-background:#ffffff;
-z-index:99999;
-width:200px;
-padding-top:0 !important;
-padding-bottom:0 !important;
-margin-bottom:0 !important;
-}
-/** below style to move sub subs to the left to keep from going off the page **/
-div.yui3-menu.custom_menu_submenu div.yui3-menu-content div.yui3-menu.custom_menu_submenu div.yui3-menu-content{
-margin-left: -400px !important; /** double the width of the menu item **/
-width: 200px;
-position: relative;
-top: -15px;
-}
-div.yui3-menu.custom_menu_submenu .yui3-menu-content li a {
-border-bottom:1px solid #dadada !important;
-border-top:1px solid #fff !important;
-text-transform:none;
-background:#fff  !important;
-}
-
-div.yui3-menu.custom_menu_submenu .yui3-menu-content li a:hover {
-background:#ffc !important;
-cursor:pointer;
-}
-
-div.yui3-menu.custom_menu_submenu li a.yui3-menu-label {
-background: #fff url([[pix:theme|yuiaright]]) no-repeat !important;
-background-position:4px 9px !important;
-}
-div.yui3-menu.custom_menu_submenu li a.yui3-menu-label:hover {
-background: #ffffcc url([[pix:theme|yuiaright]]) no-repeat !important;
-background-position:4px 9px !important;
-}
 /** yui dock bar **/
 #dock {
 padding-top: 0px;
@@ -1191,4 +971,16 @@ font-size: 12px;
 }
 div.tabtree li.selected a span {
 color: #333333;
+}
+
+.path-mod-page .generalbox {
+    border: 1px solid #dadada;
+    background: white;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+}
+
+#page-course-category .generalbox {
+    background: white;
+    background: rgba(255, 255, 255, 0.9);
 }
