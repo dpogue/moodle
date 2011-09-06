@@ -429,8 +429,21 @@ border-bottom:0;
 }
 
 div.categorybox {
-border:0 solid #ccc;
-margin-top:0;
+    border:0 solid #ccc;
+    margin-top:0;
+    background: white;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    padding: 15px;
+}
+
+.categorylist .category {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.categorybox .numberofcourse {
+    display: none;
 }
 
 td.category.name a {
