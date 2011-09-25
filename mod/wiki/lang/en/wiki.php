@@ -10,6 +10,8 @@
  * @package wiki
  */
 $string['addcomment'] = 'Add comment';
+$string['admin'] = 'Administration';
+$string['adminmenu'] = 'Admin menu';
 $string['attachmentattach'] = 'Add as attachment';
 $string['attachmentimage'] = 'Add as image';
 $string['attachmentlink'] = 'Add as link';
@@ -40,9 +42,12 @@ $string['defaultformat_help'] = 'This setting determines the default format used
 * Creole - A common wiki markup language for which a small edit toolbar is available
 * Nwiki - Mediawiki-like markup language used in the contributed Nwiki module';
 $string['deletecomment'] = 'Deleting comment';
+$string['deletecommentcheck'] = 'Delete comment';
+$string['deletecommentcheckfull'] = 'Are you sure you want to delete the comment?';
 $string['deleteupload'] = 'Delete';
 $string['deletedbegins'] = 'Deleted begins';
 $string['deletedends'] = 'Deleted ends';
+$string['deleteversions'] = 'Delete page versions';
 $string['addedbegins'] = 'added begins';
 $string['addedends'] = 'added ends';
 $string['diff'] = 'Diff';
@@ -82,6 +87,7 @@ $string['formatnwiki_link'] = 'mod/wiki/nwiki';
 $string['history'] = 'History';
 $string['history_help'] = 'The history lists links to previous versions of the page.';
 $string['html'] = 'HTML';
+$string['incorrectdeleteversions'] = "Page versions provided for deletion are incorrect.";
 $string['insertcomment'] = 'Insert comment';
 $string['insertimage'] = 'Insert an image...';
 $string['insertimage_help'] = 'This drop-down list will insert an image to the wiki editor. If you need to add more images to the wiki, please use "Files" tab.';
@@ -93,6 +99,8 @@ $string['javascriptdisabledlocks'] = 'Javascript is disabled on your browser and
 $string['lockingajaxtimeout'] = 'Edit page locking refresh time';
 $string['lockingtimeout'] = 'Locking timeout';
 $string['links'] = 'Links';
+$string['listall'] = 'List all';
+$string['listorphan'] = 'List orphan';
 $string['map'] = 'Map';
 $string['mapmenu'] = 'Map menu';
 $string['migrationfinished'] = 'Migration finished successfully';
@@ -160,6 +168,7 @@ $string['reparsetimeout'] = 'Reparsing default timeout';
 $string['repeatedsection'] = 'Wiki error: Section name cannot be repeated \'{$a}\'';
 $string['restore'] = 'Restore';
 $string['removeallwikitags'] = 'Remove all wiki tags';
+$string['removepages'] = 'Remove pages';
 $string['restoreconfirm'] = 'Are you sure you want to restore version #{$a}?';
 $string['restoreerror'] = 'Version #{$a} could not be restored';
 $string['restorethis'] = 'Restore this version';
