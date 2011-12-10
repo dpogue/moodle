@@ -353,7 +353,7 @@ abstract class quiz_attempt_report extends quiz_default_report {
                 // Ensure the attempt exists, and belongs to this quiz. If not skip.
                 continue;
             }
-            if ($allowed && !array_key_exists($attempt->userid, $allowed)) {
+            if ($allowed && !in_array($attempt->userid, $allowed)) {
                 // Ensure the attempt belongs to a student included in the report. If not skip.
                 continue;
             }
@@ -391,10 +391,10 @@ abstract class quiz_attempt_report_table extends table_sql {
     protected $groupstudents;
     protected $students;
     protected $questions;
-    protected $candelete;
+    protected $includecheckboxes;
 
     public function __construct($uniqueid, $quiz, $context, $qmsubselect, $groupstudents,
-            $students, $questions, $candelete, $reporturl, $displayoptions) {
+            $students, $questions, $includecheckboxes, $reporturl, $displayoptions) {
         parent::__construct($uniqueid);
         $this->quiz = $quiz;
         $this->context = $context;
@@ -402,7 +402,7 @@ abstract class quiz_attempt_report_table extends table_sql {
         $this->groupstudents = $groupstudents;
         $this->students = $students;
         $this->questions = $questions;
-        $this->candelete = $candelete;
+        $this->includecheckboxes = $includecheckboxes;
         $this->reporturl = $reporturl;
         $this->displayoptions = $displayoptions;
     }
@@ -614,13 +614,21 @@ abstract class quiz_attempt_report_table extends table_sql {
             return;
         }
 
+        // This condition roughly filters the list of attempts to be considered.
+        // It is only used in a subselect to help crappy databases (see MDL-30122)
+        // therefore, it is better to use a very simple join, which may include
+        // too many records, than to do a super-accurate join.
+        $qubaids = new qubaid_join("{quiz_attempts} {$alias}quiza", "{$alias}quiza.uniqueid",
+                "{$alias}quiza.quiz = :{$alias}quizid", array("{$alias}quizid" => $this->sql->params['quizid']));
+
         $dm = new question_engine_data_mapper();
-        $inlineview = $dm->question_attempt_latest_state_view($alias);
+        list($inlineview, $viewparams) = $dm->question_attempt_latest_state_view($alias, $qubaids);
 
         $this->sql->fields .= ",\n$fields";
         $this->sql->from .= "\nLEFT JOIN $inlineview ON " .
                 "$alias.questionusageid = quiza.uniqueid AND $alias.slot = :{$alias}slot";
         $this->sql->params[$alias . 'slot'] = $slot;
+        $this->sql->params = array_merge($this->sql->params, $viewparams);
     }
 
     /**
@@ -674,5 +682,51 @@ abstract class quiz_attempt_report_table extends table_sql {
         $sortcolumns = parent::get_sort_columns();
         $sortcolumns['quiza.id'] = SORT_ASC;
         return $sortcolumns;
+    }
+
+    public function wrap_html_start() {
+        if ($this->is_downloading() || !$this->includecheckboxes) {
+            return;
+        }
+
+        $url = new moodle_url($this->reporturl, $this->displayoptions);
+        $url->param('sesskey', sesskey());
+
+        echo '<div id="tablecontainer">';
+        echo '<form id="attemptsform" method="post" action="' . $url->out_omit_querystring() . '">';
+
+        echo html_writer::input_hidden_params($url);
+        echo '<div>';
+    }
+
+    public function wrap_html_finish() {
+        if ($this->is_downloading() || !$this->includecheckboxes) {
+            return;
+        }
+
+        echo '<div id="commands">';
+        echo '<a href="javascript:select_all_in(\'DIV\', null, \'tablecontainer\');">' .
+                get_string('selectall', 'quiz') . '</a> / ';
+        echo '<a href="javascript:deselect_all_in(\'DIV\', null, \'tablecontainer\');">' .
+                get_string('selectnone', 'quiz') . '</a> ';
+        echo '&nbsp;&nbsp;';
+        $this->submit_buttons();
+        echo '</div>';
+        // Close form
+        echo '</div>';
+        echo '</form></div>';
+    }
+
+    /**
+     * Output any submit buttons required by the $this->includecheckboxes form.
+     */
+    protected function submit_buttons() {
+        global $PAGE;
+        if (has_capability('mod/quiz:deleteattempts', $this->context)) {
+            echo '<input type="submit" id="deleteattemptsbutton" name="delete" value="' .
+                    get_string('deleteselected', 'quiz_overview') . '"/>';
+            $PAGE->requires->event_handler('#deleteattemptsbutton', 'click', 'M.util.show_confirm_dialog',
+                    array('message' => get_string('deleteattemptcheck', 'quiz')));
+        }
     }
 }

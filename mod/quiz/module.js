@@ -113,7 +113,7 @@ M.mod_quiz.timer = {
         var minutes = Math.floor(secondsleft/60);
         secondsleft -= minutes*60;
         var seconds = secondsleft;
-        Y.one('#quiz-time-left').setContent('' + hours + ':' +
+        Y.one('#quiz-time-left').setContent(hours + ':' +
                 M.mod_quiz.timer.two_digit(minutes) + ':' +
                 M.mod_quiz.timer.two_digit(seconds));
 
@@ -170,7 +170,7 @@ M.mod_quiz.nav.init = function(Y) {
 
     if (Y.one('a.endtestlink')) {
         Y.on('click', function(e) {
-            e.preventDefault(e);
+            e.preventDefault();
             Y.one('#followingpage').set('value', -1);
             Y.one('#responseform').submit();
         }, 'a.endtestlink');

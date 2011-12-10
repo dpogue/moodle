@@ -28,8 +28,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $string['clianswerno'] = 'Не';
 $string['cliansweryes'] = 'Да';
 $string['cliincorrectvalueretry'] = 'Неправилна стойност. Моля опитайте отново';
+$string['clitypevalue'] = 'Тип стойност';
 $string['environmentrequireinstall'] = 'Трябва да бъде инсталиран и разрешен';
 $string['environmentrequireversion'] = 'Необходима е версия {$a->needed} а Вие имате  {$a->current}';

@@ -717,7 +717,12 @@ function get_courses_search($searchterms, $sort='fullname ASC', $page=0, $record
     $params     = array();
     $i = 0;
 
-    $concat = $DB->sql_concat('c.summary', "' '", 'c.fullname', "' '", 'c.idnumber', "' '", 'c.shortname');
+    // Thanks Oracle for your non-ansi concat and type limits in coalesce. MDL-29912
+    if ($DB->get_dbfamily() == 'oracle') {
+        $concat = $DB->sql_concat('c.summary', "' '", 'c.fullname', "' '", 'c.idnumber', "' '", 'c.shortname');
+    } else {
+        $concat = $DB->sql_concat("COALESCE(c.summary, '". $DB->sql_empty() ."')", "' '", 'c.fullname', "' '", 'c.idnumber', "' '", 'c.shortname');
+    }
 
     foreach ($searchterms as $searchterm) {
         $i++;
@@ -1933,7 +1938,9 @@ function count_login_failures($mode, $username, $lastlogin) {
  */
 function print_object($object) {
     echo '<pre class="notifytiny">';
-    print_r($object);  // Direct to output because some objects get too big for memory otherwise!
+    // we may need a lot of memory here
+    raise_memory_limit(MEMORY_EXTRA);
+    echo s(print_r($object, true));
     echo '</pre>';
 }
 

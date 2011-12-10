@@ -241,6 +241,9 @@ $pagingbar = '';
 foreach ($initials as $initial) {
     $var = 'si'.$initial;
 
+    $othervar = $initial == 'first' ? 'silast' : 'sifirst';
+    $othervar = $$othervar != 'all' ? "&amp;{$othervar}={$$othervar}" : '';
+
     $pagingbar .= ' <div class="initialbar '.$initial.'initial">';
     $pagingbar .= get_string($initial.'name').':&nbsp;';
 
@@ -248,7 +251,7 @@ foreach ($initials as $initial) {
         $pagingbar .= '<strong>'.get_string('all').'</strong> ';
     }
     else {
-        $pagingbar .= '<a href="'.$link.'">'.get_string('all').'</a> ';
+        $pagingbar .= "<a href=\"{$link}{$othervar}\">".get_string('all').'</a> ';
     }
 
     foreach ($alphabet as $letter) {
@@ -256,7 +259,7 @@ foreach ($initials as $initial) {
             $pagingbar .= '<strong>'.$letter.'</strong> ';
         }
         else {
-            $pagingbar .= '<a href="'.$link.'&amp;'.$var.'='.$letter.'">'.$letter.'</a> ';
+            $pagingbar .= "<a href=\"$link&amp;$var={$letter}{$othervar}\">$letter</a> ";
         }
     }
 
@@ -270,10 +273,19 @@ if($total > COMPLETION_REPORT_PAGE) {
     $pagingbar .= '<div class="paging">';
     $pagingbar .= get_string('page').': ';
 
+    $sistrings = array();
+    if ($sifirst != 'all') {
+        $sistrings[] =  "sifirst={$sifirst}";
+    }
+    if ($silast != 'all') {
+        $sistrings[] =  "silast={$silast}";
+    }
+    $sistring = !empty($sistrings) ? '&amp;'.implode('&amp;', $sistrings) : '';
+
     // Display previous link
     if ($start > 0) {
         $pstart = max($start - COMPLETION_REPORT_PAGE, 0);
-        $pagingbar .= '(<a class="previous" href="'.$link.$pstart.'">'.get_string('previous').'</a>)&nbsp;';
+        $pagingbar .= "(<a class=\"previous\" href=\"{$link}{$pstart}{$sistring}\">".get_string('previous').'</a>)&nbsp;';
     }
 
     // Create page links
@@ -286,7 +298,7 @@ if($total > COMPLETION_REPORT_PAGE) {
             $pagingbar .= '&nbsp;'.$curpage.'&nbsp;';
         }
         else {
-            $pagingbar .= '&nbsp;<a href="'.$link.$curstart.'">'.$curpage.'</a>&nbsp;';
+            $pagingbar .= "&nbsp;<a href=\"{$link}{$curstart}{$sistring}\">$curpage</a>&nbsp;";
         }
 
         $curstart += COMPLETION_REPORT_PAGE;
@@ -295,7 +307,7 @@ if($total > COMPLETION_REPORT_PAGE) {
     // Display next link
     $nstart = $start + COMPLETION_REPORT_PAGE;
     if ($nstart < $total) {
-        $pagingbar .= '&nbsp;(<a class="next" href="'.$link.$nstart.'">'.get_string('next').'</a>)';
+        $pagingbar .= "&nbsp;(<a class=\"next\" href=\"{$link}{$nstart}{$sistring}\">".get_string('next').'</a>)';
     }
 
     $pagingbar .= '</div>';
@@ -325,7 +337,7 @@ if(!$csv) {
 
     // Print criteria group names
     print PHP_EOL.'<tr style="vertical-align: top">';
-    print '<th scope="row" class="rowheader">'.get_string('criteriagroup', 'completion').'</th>';
+    print '<th scope="row" colspan="'.($idnumbers ? 2 : 1).'" class="rowheader">'.get_string('criteriagroup', 'completion').'</th>';
 
     $current_group = false;
     $col_count = 0;
@@ -359,7 +371,7 @@ if(!$csv) {
 
     // Print aggregation methods
     print PHP_EOL.'<tr style="vertical-align: top">';
-    print '<th scope="row" class="rowheader">'.get_string('aggregationmethod', 'completion').'</th>';
+    print '<th scope="row" colspan="'.($idnumbers ? 2: 1).'" class="rowheader">'.get_string('aggregationmethod', 'completion').'</th>';
 
     $current_group = false;
     $col_count = 0;
@@ -418,7 +430,7 @@ if(!$csv) {
     if (COMPLETION_REPORT_COL_TITLES) {
 
         print PHP_EOL.'<tr>';
-        print '<th scope="row" class="rowheader">'.get_string('criteria', 'completion').'</th>';
+        print '<th scope="row" colspan="'.($idnumbers ? 2 : 1).'" class="rowheader">'.get_string('criteria', 'completion').'</th>';
 
         foreach ($criteria as $criterion) {
             // Get criteria details
@@ -441,12 +453,15 @@ if(!$csv) {
 
     // User heading / sort option
     print '<th scope="col" class="completion-sortchoice" style="clear: both;">';
+
+    $sistring = "&amp;silast={$silast}&amp;sifirst={$sifirst}";
+
     if($firstnamesort) {
         print
-            get_string('firstname').' / <a href="./?course='.$course->id.'">'.
+            get_string('firstname')." / <a href=\"./?course={$course->id}{$sistring}\">".
             get_string('lastname').'</a>';
     } else {
-        print '<a href="./?course='.$course->id.'&amp;sort=firstname">'.
+        print "<a href=\"./?course={$course->id}&amp;sort=firstname{$sistring}\">".
             get_string('firstname').'</a> / '.
             get_string('lastname');
     }

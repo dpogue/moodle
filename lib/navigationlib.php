@@ -1060,7 +1060,7 @@ class global_navigation extends navigation_node {
         $mycourses = enrol_get_my_courses(NULL, 'visible DESC,sortorder ASC', $limit);
         $showallcourses = (count($mycourses) == 0 || !empty($CFG->navshowallcourses));
         $showcategories = ($showallcourses && $this->show_categories());
-        $issite = ($this->page->course->id != SITEID);
+        $issite = ($this->page->course->id == SITEID);
         $ismycourse = (array_key_exists($this->page->course->id, $mycourses));
 
         // Check if any courses were returned.
@@ -1080,148 +1080,84 @@ class global_navigation extends navigation_node {
         // JavaScript enabled.
         $frontpagecourse = $this->load_course($SITE);
         $this->add_front_page_course_essentials($frontpagecourse, $SITE);
+        $this->load_course_sections($SITE, $frontpagecourse);
 
         $canviewcourseprofile = true;
 
-        // Next load context specific content into the navigation
-        switch ($this->page->context->contextlevel) {
-            case CONTEXT_SYSTEM :
-                // This has already been loaded we just need to map the variable
-                $coursenode = $frontpagecourse;
-                $this->load_all_categories(null, $showcategories);
-                break;
-            case CONTEXT_COURSECAT :
-                // This has already been loaded we just need to map the variable
-                $coursenode = $frontpagecourse;
-                $this->load_all_categories($this->page->context->instanceid, $showcategories);
-                break;
-            case CONTEXT_BLOCK :
-            case CONTEXT_COURSE :
-                // Load the course associated with the page into the navigation
-                $course = $this->page->course;
-                if ($showcategories && !$issite && !$ismycourse) {
-                    $this->load_all_categories($course->category, $showcategories);
-                }
-                $coursenode = $this->load_course($course);
-
-                // If the course wasn't added then don't try going any further.
-                if (!$coursenode) {
-                    $canviewcourseprofile = false;
+        // No need to run the generation code for if its the front page.
+        // That has already been done for every page above.
+        if (!$issite) {
+            // Next load context specific content into the navigation
+            switch ($this->page->context->contextlevel) {
+                case CONTEXT_SYSTEM :
+                    // This has already been loaded we just need to map the variable
+                    $coursenode = $frontpagecourse;
+                    $this->load_all_categories(null, $showcategories);
                     break;
-                }
-
-                // If the user is not enrolled then we only want to show the
-                // course node and not populate it.
-                $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
-
-                // Not enrolled, can't view, and hasn't switched roles
-                if (!can_access_course($coursecontext)) {
-                    // TODO: very ugly hack - do not force "parents" to enrol into course their child is enrolled in,
-                    // this hack has been propagated from user/view.php to display the navigation node. (MDL-25805)
-                    $isparent = false;
-                    if ($this->useridtouseforparentchecks) {
-                        if ($this->useridtouseforparentchecks != $USER->id) {
-                            $usercontext   = get_context_instance(CONTEXT_USER, $this->useridtouseforparentchecks, MUST_EXIST);
-                            if ($DB->record_exists('role_assignments', array('userid' => $USER->id, 'contextid' => $usercontext->id))
-                                    and has_capability('moodle/user:viewdetails', $usercontext)) {
-                                $isparent = true;
-                            }
-                        }
+                case CONTEXT_COURSECAT :
+                    // This has already been loaded we just need to map the variable
+                    $coursenode = $frontpagecourse;
+                    $this->load_all_categories($this->page->context->instanceid, $showcategories);
+                    break;
+                case CONTEXT_BLOCK :
+                case CONTEXT_COURSE :
+                    // Load the course associated with the page into the navigation
+                    $course = $this->page->course;
+                    if ($showcategories && !$ismycourse) {
+                        $this->load_all_categories($course->category, $showcategories);
                     }
+                    $coursenode = $this->load_course($course);
 
-                    if (!$isparent) {
-                        $coursenode->make_active();
+                    // If the course wasn't added then don't try going any further.
+                    if (!$coursenode) {
                         $canviewcourseprofile = false;
                         break;
                     }
-                }
-                // Add the essentials such as reports etc...
-                $this->add_course_essentials($coursenode, $course);
-                if ($this->format_display_course_content($course->format)) {
-                    // Load the course sections
-                    $sections = $this->load_course_sections($course, $coursenode);
-                }
-                if (!$coursenode->contains_active_node() && !$coursenode->search_for_active_node()) {
-                    $coursenode->make_active();
-                }
-                break;
-            case CONTEXT_MODULE :
-                $course = $this->page->course;
-                $cm = $this->page->cm;
 
-                if ($showcategories && !$issite && !$ismycourse) {
-                    $this->load_all_categories($course->category, $showcategories);
-                }
+                    // If the user is not enrolled then we only want to show the
+                    // course node and not populate it.
+                    $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
 
-                // Load the course associated with the page into the navigation
-                $coursenode = $this->load_course($course);
-
-                // If the course wasn't added then don't try going any further.
-                if (!$coursenode) {
-                    $canviewcourseprofile = false;
-                    break;
-                }
-
-                // If the user is not enrolled then we only want to show the
-                // course node and not populate it.
-                $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
-                if (!can_access_course($coursecontext)) {
-                    $coursenode->make_active();
-                    $canviewcourseprofile = false;
-                    break;
-                }
-
-                $this->add_course_essentials($coursenode, $course);
-                // Load the course sections into the page
-                $sections = $this->load_course_sections($course, $coursenode);
-                if ($course->id != SITEID) {
-                    // Find the section for the $CM associated with the page and collect
-                    // its section number.
-                    if (isset($cm->sectionnum)) {
-                        $cm->sectionnumber = $cm->sectionnum;
-                    } else {
-                        foreach ($sections as $section) {
-                            if ($section->id == $cm->section) {
-                                $cm->sectionnumber = $section->section;
-                                break;
+                    // Not enrolled, can't view, and hasn't switched roles
+                    if (!can_access_course($coursecontext)) {
+                        // TODO: very ugly hack - do not force "parents" to enrol into course their child is enrolled in,
+                        // this hack has been propagated from user/view.php to display the navigation node. (MDL-25805)
+                        $isparent = false;
+                        if ($this->useridtouseforparentchecks) {
+                            if ($this->useridtouseforparentchecks != $USER->id) {
+                                $usercontext   = get_context_instance(CONTEXT_USER, $this->useridtouseforparentchecks, MUST_EXIST);
+                                if ($DB->record_exists('role_assignments', array('userid' => $USER->id, 'contextid' => $usercontext->id))
+                                        and has_capability('moodle/user:viewdetails', $usercontext)) {
+                                    $isparent = true;
+                                }
                             }
                         }
-                    }
 
-                    // Load all of the section activities for the section the cm belongs to.
-                    if (isset($cm->sectionnumber) and !empty($sections[$cm->sectionnumber])) {
-                        list($sectionarray, $activityarray) = $this->generate_sections_and_activities($course);
-                        $activities = $this->load_section_activities($sections[$cm->sectionnumber]->sectionnode, $cm->sectionnumber, $activityarray);
-                    } else {
-                        $activities = array();
-                        if ($activity = $this->load_stealth_activity($coursenode, get_fast_modinfo($course))) {
-                            // "stealth" activity from unavailable section
-                            $activities[$cm->id] = $activity;
+                        if (!$isparent) {
+                            $coursenode->make_active();
+                            $canviewcourseprofile = false;
+                            break;
                         }
                     }
-                } else {
-                    $activities = array();
-                    $activities[$cm->id] = $coursenode->get($cm->id, navigation_node::TYPE_ACTIVITY);
-                }
-                if (!empty($activities[$cm->id])) {
-                    // Finally load the cm specific navigaton information
-                    $this->load_activity($cm, $course, $activities[$cm->id]);
-                    // Check if we have an active ndoe
-                    if (!$activities[$cm->id]->contains_active_node() && !$activities[$cm->id]->search_for_active_node()) {
-                        // And make the activity node active.
-                        $activities[$cm->id]->make_active();
+                    // Add the essentials such as reports etc...
+                    $this->add_course_essentials($coursenode, $course);
+                    if ($this->format_display_course_content($course->format)) {
+                        // Load the course sections
+                        $sections = $this->load_course_sections($course, $coursenode);
                     }
-                } else {
-                    //TODO: something is wrong, what to do? (Skodak)
-                }
-                break;
-            case CONTEXT_USER :
-                $course = $this->page->course;
-                if ($course->id != SITEID) {
-                    if ($showcategories && !$issite && !$ismycourse) {
+                    if (!$coursenode->contains_active_node() && !$coursenode->search_for_active_node()) {
+                        $coursenode->make_active();
+                    }
+                    break;
+                case CONTEXT_MODULE :
+                    $course = $this->page->course;
+                    $cm = $this->page->cm;
+
+                    if ($showcategories && !$ismycourse) {
                         $this->load_all_categories($course->category, $showcategories);
                     }
-                    // Load the course associated with the user into the navigation
+
+                    // Load the course associated with the page into the navigation
                     $coursenode = $this->load_course($course);
 
                     // If the course wasn't added then don't try going any further.
@@ -1238,10 +1174,89 @@ class global_navigation extends navigation_node {
                         $canviewcourseprofile = false;
                         break;
                     }
+
                     $this->add_course_essentials($coursenode, $course);
+                    // Load the course sections into the page
                     $sections = $this->load_course_sections($course, $coursenode);
+                    if ($course->id != SITEID) {
+                        // Find the section for the $CM associated with the page and collect
+                        // its section number.
+                        if (isset($cm->sectionnum)) {
+                            $cm->sectionnumber = $cm->sectionnum;
+                        } else {
+                            foreach ($sections as $section) {
+                                if ($section->id == $cm->section) {
+                                    $cm->sectionnumber = $section->section;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Load all of the section activities for the section the cm belongs to.
+                        if (isset($cm->sectionnumber) and !empty($sections[$cm->sectionnumber])) {
+                            list($sectionarray, $activityarray) = $this->generate_sections_and_activities($course);
+                            $activities = $this->load_section_activities($sections[$cm->sectionnumber]->sectionnode, $cm->sectionnumber, $activityarray);
+                        } else {
+                            $activities = array();
+                            if ($activity = $this->load_stealth_activity($coursenode, get_fast_modinfo($course))) {
+                                // "stealth" activity from unavailable section
+                                $activities[$cm->id] = $activity;
+                            }
+                        }
+                    } else {
+                        $activities = array();
+                        $activities[$cm->id] = $coursenode->get($cm->id, navigation_node::TYPE_ACTIVITY);
+                    }
+                    if (!empty($activities[$cm->id])) {
+                        // Finally load the cm specific navigaton information
+                        $this->load_activity($cm, $course, $activities[$cm->id]);
+                        // Check if we have an active ndoe
+                        if (!$activities[$cm->id]->contains_active_node() && !$activities[$cm->id]->search_for_active_node()) {
+                            // And make the activity node active.
+                            $activities[$cm->id]->make_active();
+                        }
+                    } else {
+                        //TODO: something is wrong, what to do? (Skodak)
+                    }
+                    break;
+                case CONTEXT_USER :
+                    $course = $this->page->course;
+                    if ($course->id != SITEID) {
+                        if ($showcategories && !$ismycourse) {
+                            $this->load_all_categories($course->category, $showcategories);
+                        }
+                        // Load the course associated with the user into the navigation
+                        $coursenode = $this->load_course($course);
+
+                        // If the course wasn't added then don't try going any further.
+                        if (!$coursenode) {
+                            $canviewcourseprofile = false;
+                            break;
+                        }
+
+                        // If the user is not enrolled then we only want to show the
+                        // course node and not populate it.
+                        $coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
+                        if (!can_access_course($coursecontext)) {
+                            $coursenode->make_active();
+                            $canviewcourseprofile = false;
+                            break;
+                        }
+                        $this->add_course_essentials($coursenode, $course);
+                        $sections = $this->load_course_sections($course, $coursenode);
+                    }
+                    break;
+            }
+        } else {
+            // We need to check if the user is viewing a front page module.
+            // If so then there is potentially more content to load yet for that
+            // module.
+            if ($this->page->context->contextlevel == CONTEXT_MODULE) {
+                $activitynode = $this->rootnodes['site']->get($this->page->cm->id, navigation_node::TYPE_ACTIVITY);
+                if ($activitynode) {
+                    $this->load_activity($this->page->cm, $this->page->course, $activitynode);
                 }
-                break;
+            }
         }
 
         $limit = 20;
@@ -1507,7 +1522,7 @@ class global_navigation extends navigation_node {
      */
     protected function add_category(stdClass $category, navigation_node $parent) {
         if (array_key_exists($category->id, $this->addedcategories)) {
-            continue;
+            return;
         }
         $url = new moodle_url('/course/category.php', array('id' => $category->id));
         $context = get_context_instance(CONTEXT_COURSECAT, $category->id);
@@ -1608,6 +1623,10 @@ class global_navigation extends navigation_node {
                     $activity->hidden = (!$cm->visible);
                     $activity->modname = $cm->modname;
                     $activity->nodetype = navigation_node::NODETYPE_LEAF;
+                    $activity->onclick = $cm->get_on_click();
+                    if (empty($activity->onclick) && !empty($cm->extra) && preg_match('/onclick=(\'|")([^\1]+)\1/', $cm->extra, $matches)) {
+                        $activity->onclick = $matches[2];
+                    }
                     $url = $cm->get_url();
                     if (!$url) {
                         $activity->url = null;
@@ -1692,6 +1711,8 @@ class global_navigation extends navigation_node {
      * @return array Array of activity nodes
      */
     protected function load_section_activities(navigation_node $sectionnode, $sectionnumber, $activities) {
+        // A static counter for JS function naming
+        static $legacyonclickcounter = 0;
 
         if ($activities instanceof course_modinfo) {
             debugging('global_navigation::load_section_activities argument 3 should now recieve an array of activites. See that method for an example.', DEBUG_DEVELOPER);
@@ -1708,7 +1729,34 @@ class global_navigation extends navigation_node {
             } else {
                 $icon = new pix_icon('icon', get_string('modulename', $activity->modname), $activity->modname);
             }
-            $activitynode = $sectionnode->add(format_string($activity->name), $activity->url, navigation_node::TYPE_ACTIVITY, null, $activity->id, $icon);
+
+            // Prepare the default name and url for the node
+            $activityname = format_string($activity->name, true, array('context' => get_context_instance(CONTEXT_MODULE, $activity->id)));
+            $action = new moodle_url($activity->url);
+
+            // Check if the onclick property is set (puke!)
+            if (!empty($activity->onclick)) {
+                // Increment the counter so that we have a unique number.
+                $legacyonclickcounter++;
+                // Generate the function name we will use
+                $functionname = 'legacy_activity_onclick_handler_'.$legacyonclickcounter;
+                $propogrationhandler = '';
+                // Check if we need to cancel propogation. Remember inline onclick
+                // events would return false if they wanted to prevent propogation and the
+                // default action.
+                if (strpos($activity->onclick, 'return false')) {
+                    $propogrationhandler = 'e.halt();';
+                }
+                // Decode the onclick - it has already been encoded for display (puke)
+                $onclick = htmlspecialchars_decode($activity->onclick);
+                // Build the JS function the click event will call
+                $jscode = "function {$functionname}(e) { $propogrationhandler $onclick }";
+                $this->page->requires->js_init_code($jscode);
+                // Override the default url with the new action link
+                $action = new action_link($action, $activityname, new component_action('click', $functionname));
+            }
+
+            $activitynode = $sectionnode->add($activityname, $action, navigation_node::TYPE_ACTIVITY, null, $activity->id, $icon);
             $activitynode->title(get_string('modulename', $activity->modname));
             $activitynode->hidden = $activity->hidden;
             $activitynode->display = $activity->display;
@@ -2300,9 +2348,11 @@ class global_navigation extends navigation_node {
             $coursenode->add(get_string('tags', 'tag'), new moodle_url('/tag/search.php'));
         }
 
-        // Calendar
-        $calendarurl = new moodle_url('/calendar/view.php', array('view' => 'month'));
-        $coursenode->add(get_string('calendar', 'calendar'), $calendarurl, self::TYPE_CUSTOM, null, 'calendar');
+        if (isloggedin()) {
+            // Calendar
+            $calendarurl = new moodle_url('/calendar/view.php', array('view' => 'month'));
+            $coursenode->add(get_string('calendar', 'calendar'), $calendarurl, self::TYPE_CUSTOM, null, 'calendar');
+        }
 
         // View course reports
         if (has_capability('moodle/site:viewreports', $this->page->context)) { // basic capability for listing of reports

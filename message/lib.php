@@ -2011,8 +2011,10 @@ function message_post_message($userfrom, $userto, $message, $format) {
     $eventdata->subject          = get_string_manager()->get_string('unreadnewmessage', 'message', fullname($userfrom), $userto->lang);
 
     if ($format == FORMAT_HTML) {
-        $eventdata->fullmessage      = '';
         $eventdata->fullmessagehtml  = $message;
+        //some message processors may revert to sending plain text even if html is supplied
+        //so we keep both plain and html versions if we're intending to send html
+        $eventdata->fullmessage = html_to_text($eventdata->fullmessagehtml);
     } else {
         $eventdata->fullmessage      = $message;
         $eventdata->fullmessagehtml  = '';
@@ -2309,6 +2311,34 @@ function get_message_processors($ready = false) {
 }
 
 /**
+ * Get an instance of the message_output class for one of the output plugins.
+ * @param string $type the message output type. E.g. 'email' or 'jabber'.
+ * @return message_output message_output the requested class.
+ */
+function get_message_processor($type) {
+    global $CFG;
+
+    // Note, we cannot use the get_message_processors function here, becaues this
+    // code is called during install after installing each messaging plugin, and
+    // get_message_processors caches the list of installed plugins.
+
+    $processorfile = $CFG->dirroot . "/message/output/{$type}/message_output_{$type}.php";
+    if (!is_readable($processorfile)) {
+        throw new coding_exception('Unknown message processor type ' . $type);
+    }
+
+    include_once($processorfile);
+
+    $processclass = 'message_output_' . $type;
+    if (!class_exists($processclass)) {
+        throw new coding_exception('Message processor ' . $type .
+                ' does not define the right class');
+    }
+
+    return new $processclass();
+}
+
+/**
  * Get messaging outputs default (site) preferences
  *
  * @return object $processors object containing information on message processors
@@ -2345,11 +2375,8 @@ function translate_message_default_setting($plugindefault, $processorname) {
     );
 
     // define the default setting
-    if ($processorname == 'email') {
-        $default = MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF;
-    } else {
-        $default = MESSAGE_PERMITTED;
-    }
+    $processor = get_message_processor($processorname);
+    $default = $processor->get_default_messaging_settings();
 
     // Validate the value. It should not exceed the maximum size
     if (!is_int($plugindefault) || ($plugindefault > 0x0f)) {

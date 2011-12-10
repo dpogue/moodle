@@ -28,6 +28,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $string['admindirname'] = 'ספריית מנהל המערכת';
 $string['availablelangs'] = 'חבילות שפה זמינות';
 $string['chooselanguagehead'] = 'בחר שפה';
@@ -103,5 +105,5 @@ $string['welcomep50'] = 'השימוש בכל היישומים בחבילה זו 
 href="http://www.gnu.org/copyleft/gpl.html">GPL</a>';
 $string['welcomep60'] = 'העמודים הבאים יובילו אותך בצורה פשוטה דרך כמה צעדים לעיצוב הגדרות <strong>Moodle</strong> במחשבך.
 תוכל לאשר את הגדרות  ברירת המחדל או, באפשרותך, לשנותם לפי צרכיך.';
-$string['welcomep70'] = 'הקש על לחצן ה"המשך" למטה כדי להמשיך עם הגדרת ה-<strong>Moodle</strong>';
+$string['welcomep70'] = 'לחצו "המשך" למטה כדי להמשיך עם הגדרת ה-<strong>Moodle</strong>';
 $string['wwwroot'] = 'כתובת האתר';

@@ -802,7 +802,14 @@ class restore_groups_structure_step extends restore_structure_step {
 
         $data->groupingid = $this->get_new_parentid('grouping'); // Use new parentid
         $data->groupid    = $this->get_mappingid('group', $data->groupid); // Get from mappings
-        $DB->insert_record('groupings_groups', $data);  // No need to set this mapping (no child info nor files)
+
+        $params = array();
+        $params['groupingid'] = $data->groupingid;
+        $params['groupid']    = $data->groupid;
+
+        if (!$DB->record_exists('groupings_groups', $params)) {
+            $DB->insert_record('groupings_groups', $data);  // No need to set this mapping (no child info nor files)
+        }
     }
 
     protected function after_execute() {
@@ -1099,7 +1106,6 @@ class restore_course_structure_step extends restore_structure_step {
         global $CFG, $DB;
 
         $data = (object)$data;
-        $oldid = $data->id; // We'll need this later
 
         $fullname  = $this->get_setting_value('course_fullname');
         $shortname = $this->get_setting_value('course_shortname');
@@ -1112,7 +1118,13 @@ class restore_course_structure_step extends restore_structure_step {
         $data->id = $this->get_courseid();
         $data->fullname = $fullname;
         $data->shortname= $shortname;
-        $data->idnumber = '';
+
+        $context = get_context_instance_by_id($this->task->get_contextid());
+        if (has_capability('moodle/course:changeidnumber', $context, $this->task->get_userid())) {
+            $data->idnumber = '';
+        } else {
+            unset($data->idnumber);
+        }
 
         // Only restrict modules if original course was and target site too for new courses
         $data->restrictmodules = $data->restrictmodules && !empty($CFG->restrictmodulesfor) && $CFG->restrictmodulesfor == 'all';
@@ -2225,8 +2237,6 @@ class restore_module_structure_step extends restore_structure_step {
  *  - Activity includes completion info (file_exists)
  */
 class restore_userscompletion_structure_step extends restore_structure_step {
-    private $done = array();
-
     /**
      * To conditionally decide if this step must be executed
      * Note the "settings" conditions are evaluated in the
@@ -2270,15 +2280,14 @@ class restore_userscompletion_structure_step extends restore_structure_step {
         $data->userid = $this->get_mappingid('user', $data->userid);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
+        // Find the existing record
+        $existing = $DB->get_record('course_modules_completion', array(
+                'coursemoduleid' => $data->coursemoduleid,
+                'userid' => $data->userid), 'id, timemodified');
         // Check we didn't already insert one for this cmid and userid
         // (there aren't supposed to be duplicates in that field, but
         // it was possible until MDL-28021 was fixed).
-        $key = $data->coursemoduleid . ',' . $data->userid;
-        if (array_key_exists($key, $this->done)) {
-            // Find the existing record
-            $existing = $DB->get_record('course_modules_completion', array(
-                    'coursemoduleid' => $data->coursemoduleid,
-                    'userid' => $data->userid), 'id, timemodified');
+        if ($existing) {
             // Update it to these new values, but only if the time is newer
             if ($existing->timemodified < $data->timemodified) {
                 $data->id = $existing->id;
@@ -2287,16 +2296,7 @@ class restore_userscompletion_structure_step extends restore_structure_step {
         } else {
             // Normal entry where it doesn't exist already
             $DB->insert_record('course_modules_completion', $data);
-            // Remember this entry
-            $this->done[$key] = true;
         }
-    }
-
-    protected function after_execute() {
-        // This gets called once per activity (according to my testing).
-        // Clearing the array isn't strictly required, but avoids using
-        // unnecessary memory.
-        $this->done = array();
     }
 }
 

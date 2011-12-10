@@ -756,9 +756,16 @@ class assignment_base {
                 $offset = required_param('offset', PARAM_INT);
                 $nextid = required_param('nextid', PARAM_INT);
                 $id = required_param('id', PARAM_INT);
-                $offset = (int)$offset+1;
-                //$this->display_submission($offset+1 , $nextid);
-                redirect('submissions.php?id='.$id.'&userid='. $nextid . '&mode=single&offset='.$offset);
+                $filter = optional_param('filter', self::FILTER_ALL, PARAM_INT);
+
+                if ($mode == 'next' || $filter !== self::FILTER_REQUIRE_GRADING) {
+                    $offset = (int)$offset+1;
+                }
+                $redirect = new moodle_url('submissions.php',
+                        array('id' => $id, 'offset' => $offset, 'userid' => $nextid,
+                        'mode' => 'single', 'filter' => $filter));
+
+                redirect($redirect);
                 break;
 
             case 'singlenosave':
@@ -959,7 +966,7 @@ class assignment_base {
         /// Get all ppl that can submit assignments
 
         $currentgroup = groups_get_activity_group($cm);
-        $users = get_enrolled_users($context, 'mod/assignment:view', $currentgroup, 'u.id');
+        $users = get_enrolled_users($context, 'mod/assignment:submit', $currentgroup, 'u.id');
         if ($users) {
             $users = array_keys($users);
             // if groupmembersonly used, remove users who are not in any group
@@ -982,7 +989,10 @@ class assignment_base {
             $userfields = user_picture::fields('u', array('lastaccess'));
             $select = "SELECT $userfields,
                               s.id AS submissionid, s.grade, s.submissioncomment,
-                              s.timemodified, s.timemarked ";
+                              s.timemodified, s.timemarked,
+                              CASE WHEN s.timemarked > 0 AND s.timemarked >= s.timemodified THEN 1
+                                   ELSE 0 END AS status ";
+
             $sql = 'FROM {user} u '.
                    'LEFT JOIN {assignment_submissions} s ON u.id = s.userid
                    AND s.assignment = '.$this->assignment->id.' '.
@@ -995,8 +1005,6 @@ class assignment_base {
 
             if (is_array($auser) && count($auser)>1) {
                 $nextuser = next($auser);
-            /// Calculate user status
-                $nextuser->status = ($nextuser->timemarked > 0) && ($nextuser->timemarked >= $nextuser->timemodified);
                 $nextid = $nextuser->id;
             }
         }
@@ -1316,7 +1324,10 @@ class assignment_base {
         if (!empty($users)) {
             $select = "SELECT $ufields,
                               s.id AS submissionid, s.grade, s.submissioncomment,
-                              s.timemodified, s.timemarked ";
+                              s.timemodified, s.timemarked,
+                              CASE WHEN s.timemarked > 0 AND s.timemarked >= s.timemodified THEN 1
+                                   ELSE 0 END AS status ";
+
             $sql = 'FROM {user} u '.
                    'LEFT JOIN {assignment_submissions} s ON u.id = s.userid
                     AND s.assignment = '.$this->assignment->id.' '.
@@ -1338,6 +1349,7 @@ class assignment_base {
                 $currentposition = 0;
                 foreach ($ausers as $auser) {
                     if ($currentposition == $offset && $offset < $endposition) {
+                        $rowclass = null;
                         $final_grade = $grading_info->items[0]->grades[$auser->id];
                         $grademax = $grading_info->items[0]->grademax;
                         $final_grade->formatted_grade = round($final_grade->grade,2) .' / ' . round($grademax,2);
@@ -1346,8 +1358,6 @@ class assignment_base {
                             $locked_overridden = 'overridden';
                         }
 
-                    /// Calculate user status
-                        $auser->status = ($auser->timemarked > 0) && ($auser->timemarked >= $auser->timemodified);
                         $picture = $OUTPUT->user_picture($auser);
 
                         if (empty($auser->submissionid)) {
@@ -1360,11 +1370,16 @@ class assignment_base {
                         ///attach file or print link to student answer, depending on the type of the assignment.
                         ///Refer to print_student_answer in inherited classes.
                             if ($auser->timemodified > 0) {
-                                $studentmodified = '<div id="ts'.$auser->id.'">'.$this->print_student_answer($auser->id)
-                                                 . userdate($auser->timemodified).'</div>';
+                                $studentmodifiedcontent = $this->print_student_answer($auser->id)
+                                        . userdate($auser->timemodified);
+                                if ($assignment->timedue && $auser->timemodified > $assignment->timedue) {
+                                    $studentmodifiedcontent .= assignment_display_lateness($auser->timemodified, $assignment->timedue);
+                                    $rowclass = 'late';
+                                }
                             } else {
-                                $studentmodified = '<div id="ts'.$auser->id.'">&nbsp;</div>';
+                                $studentmodifiedcontent = '&nbsp;';
                             }
+                            $studentmodified = html_writer::tag('div', $studentmodifiedcontent, array('id' => 'ts' . $auser->id));
                         ///Print grade, dropdown or text
                             if ($auser->timemarked > 0) {
                                 $teachermodified = '<div id="tt'.$auser->id.'">'.userdate($auser->timemarked).'</div>';
@@ -1477,7 +1492,7 @@ class assignment_base {
                         if ($uses_outcomes) {
                             $row[] = $outcomes;
                         }
-                        $table->add_data($row);
+                        $table->add_data($row, $rowclass);
                     }
                     $currentposition++;
                 }
@@ -1764,7 +1779,7 @@ class assignment_base {
                 $info->username = fullname($user, true);
                 $info->assignment = format_string($this->assignment->name,true);
                 $info->url = $CFG->wwwroot.'/mod/assignment/submissions.php?id='.$this->cm->id;
-                $info->timeupdated = strftime('%c',$submission->timemodified);
+                $info->timeupdated = userdate($submission->timemodified, '%c', $teacher->timezone);
 
                 $postsubject = $strsubmitted.': '.$info->username.' -> '.$this->assignment->name;
                 $posttext = $this->email_teachers_text($info);
@@ -1918,16 +1933,20 @@ class assignment_base {
                 $path = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$this->context->id.'/mod_assignment/submission/'.$submission->id.'/'.$filename);
                 $output .= '<a href="'.$path.'" ><img src="'.$OUTPUT->pix_url(file_mimetype_icon($mimetype)).'" class="icon" alt="'.$mimetype.'" />'.s($filename).'</a>';
                 if ($CFG->enableportfolios && $this->portfolio_exportable() && has_capability('mod/assignment:exportownsubmission', $this->context)) {
-                    $button->set_callback_options('assignment_portfolio_caller', array('id' => $this->cm->id, 'fileid' => $file->get_id()), '/mod/assignment/locallib.php');
+                    $button->set_callback_options('assignment_portfolio_caller', array('id' => $this->cm->id, 'submissionid' => $submission->id, 'fileid' => $file->get_id()), '/mod/assignment/locallib.php');
                     $button->set_format_by_file($file);
                     $output .= $button->to_html(PORTFOLIO_ADD_ICON_LINK);
                 }
-                $output .= plagiarism_get_links(array('userid'=>$userid, 'file'=>$file, 'cmid'=>$this->cm->id, 'course'=>$this->course, 'assignment'=>$this->assignment));
-                $output .= '<br />';
+
+                if ($CFG->enableplagiarism) {
+                    require_once($CFG->libdir.'/plagiarismlib.php');
+                    $output .= plagiarism_get_links(array('userid'=>$userid, 'file'=>$file, 'cmid'=>$this->cm->id, 'course'=>$this->course, 'assignment'=>$this->assignment));
+                    $output .= '<br />';
+                }
             }
             if ($CFG->enableportfolios && count($files) > 1  && $this->portfolio_exportable() && has_capability('mod/assignment:exportownsubmission', $this->context)) {
-                $button->set_callback_options('assignment_portfolio_caller', array('id' => $this->cm->id), '/mod/assignment/locallib.php');
-                $output .= '<br />'  . $button->to_html();
+                $button->set_callback_options('assignment_portfolio_caller', array('id' => $this->cm->id, 'submissionid' => $submission->id), '/mod/assignment/locallib.php');
+                $output .= '<br />'  . $button->to_html(PORTFOLIO_ADD_TEXT_LINK);
             }
         }
 

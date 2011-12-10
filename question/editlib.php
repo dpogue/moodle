@@ -1198,7 +1198,7 @@ class question_bank_view {
 
     protected function print_choose_category_message($categoryandcontext) {
         echo "<p style=\"text-align:center;\"><b>";
-        print_string("selectcategoryabove", "question");
+        print_string('selectcategoryabove', 'question');
         echo "</b></p>";
     }
 
@@ -1787,7 +1787,7 @@ function print_qtype_to_add_option($qtype) {
     echo '<span class="qtypename">';
     $fakequestion = new stdClass();
     $fakequestion->qtype = $qtype->name();
-    print_question_icon($fakequestion);
+    echo print_question_icon($fakequestion);
     echo $qtype->menu_name() . '</span><span class="qtypesummary">' .
             get_string($qtype->name() . 'summary', 'qtype_' . $qtype->name());
     echo "</span></label>\n";
