@@ -98,7 +98,7 @@ echo $OUTPUT->doctype() ?>
             <h3>Current Conditions</h3>
             <span>Temperature:</span>           <b id="temperature">&mdash; &deg;C</b><br><br>
             <span>Relative Humidity:</span>     <b id="humidity">&mdash;%</b><br>
-            <span>Daily Precipitation:</span>   <b id="precip_daily">&mdash; mm</b><br>
+            <span>Daily Precipitation:</span>   <b id="precip_daily">&mdash; cm</b><br>
             <span>Hourly Precipitation:</span>  <b id="precip_hourly">&mdash; mm</b><br>
             <span>Air Pressure:</span>          <b id="pressure">&mdash; mb</b><br>
             <span>UV Index:</span>              <b id="uv_index">&mdash;</b><br>
@@ -108,13 +108,13 @@ echo $OUTPUT->doctype() ?>
         </div>
 		<div id="slideshow">
 <?php
-    if ($fd = opendir($PAGE->theme->dir.'/pix/slideshow')) {
-    $slideshow = array();
-    while (false !== ($file = readdir($fd))) {
-        if ($file[0] === '.') continue;
-        $name = substr($file, 0, strrpos($file, '.'));
-        $slideshow[] = $OUTPUT->pix_url("slideshow/$name", 'theme');
-    }
+    if ($fd = @opendir($PAGE->theme->dir.'/pix/slideshow')) {
+        $slideshow = array();
+        while (false !== ($file = readdir($fd))) {
+            if ($file[0] === '.') continue;
+            $name = substr($file, 0, strrpos($file, '.'));
+            $slideshow[] = $OUTPUT->pix_url("slideshow/$name", 'theme');
+        }
 ?>
             <script>M.thss_slideshow = ["<?php echo join('", "', $slideshow); ?>"];</script>
             <div id="slideshow_current" data-slideshow-index="0"></div>

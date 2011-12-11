@@ -50,7 +50,9 @@ try {
     $hourly .= ' mm';
 
     $daily  = $xpath->query('//precip_today_metric')->item(0)->textContent;
-    $daily .= ' mm';
+    if (strstr($daily, 'cm') === FALSE && strstr($daily, 'mm') === FALSE) {
+        $daily .= ' mm';
+    }
 
     $wind_dir = $xpath->query('//wind_dir')->item(0)->textContent;
 
