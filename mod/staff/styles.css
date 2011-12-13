@@ -1,0 +1,73 @@
+/*
+ * Media Object
+ * 
+ * Adapted from:
+ *   stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code/
+ *   facebook.com
+ */
+/*
+ * Apply clearfix to main object element.
+ */
+.staff {
+  *zoom: 1;
+  margin: 10px;
+  padding: 5px;
+  background: white;
+}
+.staff:before, .staff:after {
+  content: "";
+  display: table;
+}
+.staff:after {
+  clear: both;
+}
+
+/*
+ * Primary graphical component (e.g. img, svg, sprite)
+ */
+.staff .img {
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+/*
+ * Optional graphical component
+ */
+.staff .opt {
+  float: right;
+  margin: 0 0 0 10px;
+}
+
+.staff h3 {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+/*
+ * 1. Remove excess space below images in .img block
+ * 2. Guard against `img {max-width:100%}` hiding all Media Object images in IE8
+ */
+.staff .img img,
+.staff .opt img {
+  display: block;
+  max-width: none;
+}
+
+/*
+ * Media object body
+ * 1. Create a new block formatting context (NBFC) in modern browsers
+ * 2. Avoid shrink-wrap behaviour of table-cell
+ * 3. Override for IE6/7
+ * 4. Create a new block formatting context in IE6/7
+ *
+ * N.B. This breaks down in some browsers when images within .body exceed its 
+ * width. The alternative is to use `overflow:hidden` to create the NBFC but 
+ * this is problematic if the object contains elements absolutely positioned 
+ * beyond the confines of its box.
+ */
+.staff .body {
+  display: table-cell;
+  width: 10000px;
+  *width: auto;
+  *zoom: 1;
+}
