@@ -1,0 +1,21 @@
+#footer {
+    width: 90%;
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 40px;
+    position: relative;
+    margin: 0 auto;
+}
+
+#footer-wrap {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+#footer-container {
+    height: 40px;
+    border-top: 1px solid #800000;
+    margin-top: 10px;
+}
