@@ -984,3 +984,10 @@ color: #333333;
     background: white;
     background: rgba(255, 255, 255, 0.9);
 }
+
+#page-site-index .forumpost .maincontent {
+    display: none;
+}
+#page-site-index .forumpost .side {
+    display: none;
+}
