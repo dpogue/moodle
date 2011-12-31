@@ -27,7 +27,10 @@ echo $OUTPUT->doctype() ?>
     <meta charset="utf-8">
 
     <title><?php echo $PAGE->title ?></title>
-    <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>" />
+    <link rel="shortcut icon" href="<?php echo $OUTPUT->pix_url('favicon', 'theme')?>">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo $OUTPUT->pix_url('icons/apple-touch-icon-114x114-precomposed', 'theme'); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $OUTPUT->pix_url('icons/apple-touch-icon-72x72-precomposed', 'theme'); ?>">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo $OUTPUT->pix_url('icons/apple-touch-icon-precomposed', 'theme'); ?>">
     <?php echo $OUTPUT->standard_head_html() ?>
 </head>
 <body id="<?php echo $PAGE->bodyid ?>" class="<?php echo $PAGE->bodyclasses.' '.join(' ', $bodyclasses) ?>">

@@ -42,7 +42,6 @@ body.pagelayout-popup {
 
 #leftside {
     background: transparent;
-    margin-right: 15px;
 
     -webkit-box-flex: 1;
        -moz-box-flex: 1;
@@ -52,7 +51,6 @@ body.pagelayout-popup {
 
 #rightside {
     background: transparent;
-    margin-left: 15px;
 
     -webkit-box-flex: 1;
        -moz-box-flex: 1;
@@ -70,6 +68,7 @@ body.pagelayout-popup {
     border: 0 none transparent;
     min-height: 250px;
     width: 50%;
+    margin: 0 15px;
 
     -webkit-box-flex: 15;
        -moz-box-flex: 15;
@@ -82,8 +81,8 @@ body.pagelayout-popup {
             box-ordinal-group: 2;
 }
 
-.pagelayout-login .loginpanel {
-    width: 800px;
+.pagelayout-login .loginbox {
+    width: 1000px;
     margin: 0 auto;
     background: white;
     background: rgba(255, 255, 255, 0.5);

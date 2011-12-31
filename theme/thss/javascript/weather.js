@@ -1,5 +1,6 @@
 function update_weather() {
     if (document.hidden || document.webkitHidden || document.mozHidden || document.msHidden) {
+        window.setTimeout(update_weather, 30000);
         return;
     }
 
@@ -17,6 +18,8 @@ function update_weather() {
         $('#winddir').text(data.wind_dir);
         $('#windspeed').text(data.wind_speed);
         $('#winddirrot').attr('transform', 'rotate('+data.wind_rot+', 32, 64)');
+
+        window.setTimeout(update_weather, 30000);
     };
 
     $.ajax({
@@ -28,7 +31,6 @@ function update_weather() {
 
 $(function() {
     if ($('#temperature')) {
-        window.setInterval(update_weather, 30000);
         update_weather();
     }
 });

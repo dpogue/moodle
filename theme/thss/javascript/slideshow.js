@@ -1,5 +1,5 @@
 function slideshow_next() {
-    if (document.hidden || document.webkitHidden) {
+    if (document.hidden || document.webkitHidden || document.mozHidden || document.msHidden) {
         return;
     }
 
