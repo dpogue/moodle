@@ -188,13 +188,19 @@ echo $OUTPUT->doctype() ?>
 
 
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<?php if ($PAGE->theme->settings->snow && date('m') == 12) { ?>
+<script src="<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/snowfall.jquery.js"></script>
+<?php } ?>
 <script>
     if (!Modernizr.flexbox) {
         Modernizr.load({
             load: '<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/flexie.min.js'
         });
     }
+<?php if ($PAGE->theme->settings->snow && date('m') == 12) { ?>
+    $(document).snowfall({minSize: 3, maxSize: 5, round: true, flakeCount: 200});
+<?php } ?>
 </script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
 </body>

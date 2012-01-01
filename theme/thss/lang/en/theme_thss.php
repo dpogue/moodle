@@ -27,5 +27,6 @@ $string['forumbackdesc'] = 'Set the background color of forum post subject.';
 $string['forumcolor'] = 'forumcolor';
 $string['forumcolordesc'] = 'Set the font color of forum post subject.';
 
-
+$string['snow'] = 'snow';
+$string['snowdesc'] = 'Turns on falling snow during the month of December.';
 

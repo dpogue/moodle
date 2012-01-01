@@ -3,6 +3,13 @@
 // Create our admin page
 $temp = new admin_settingpage('theme_thss', get_string('configtitle','theme_thss'));
 
+$name = 'theme_thss/snow';
+$title = get_string('snow', 'theme_thss');
+$description = get_string('snowdesc', 'theme_thss');
+$default = FALSE;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$temp->add($setting);
+
 // link color setting
 $name = 'theme_thss/linkcolor';
 $title = get_string('linkcolor','theme_thss');
