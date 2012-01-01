@@ -21,13 +21,19 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+$capabilities = array(
 
-if ($ADMIN->locate('news') == NULL) {
-    $ADMIN->add('root', new admin_category('news', get_string('admincategory', 'tool_newsletter')));
-}
+    'tool/dailynews:viewall' => array(
+        'riskbitmask'   => RISK_DATALOSS,
+        'captype'       => 'read',
+        'contextlevel'  => CONTEXT_SYSTEM,
+        'archetypes'    => array()
+    ),
 
-if ($hassiteconfig) {
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterview', get_string('toolnewsletterview', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/index.php'));
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterpost', get_string('toolnewsletterpost', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/post.php'));
-}
+    'tool/dailynews:add' => array(
+        'riskbitmask'   => RISK_SPAM,
+        'captype'       => 'write',
+        'contextlevel'  => CONTEXT_SYSTEM,
+        'archetypes'    => array()
+    )
+);

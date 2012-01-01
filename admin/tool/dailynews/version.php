@@ -16,18 +16,13 @@
 
 /**
  * @package    tool
- * @subpackage newsletter
- * @copyright  2011 Darryl Pogue
+ * @subpackage dailynews
+ * @copyright  2012 Darryl Pogue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-if ($ADMIN->locate('news') == NULL) {
-    $ADMIN->add('root', new admin_category('news', get_string('admincategory', 'tool_newsletter')));
-}
-
-if ($hassiteconfig) {
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterview', get_string('toolnewsletterview', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/index.php'));
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterpost', get_string('toolnewsletterpost', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/post.php'));
-}
+$plugin->version   = 2012010100; // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2011092100; // Requires this Moodle version
+$plugin->component = 'tool_dailynews'; // Full name of the plugin (used for diagnostics)

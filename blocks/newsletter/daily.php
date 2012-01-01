@@ -15,16 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_newsletter', language 'en', branch 'MOODLE_22_STABLE'
- *
- * @package   block_newsletter
- * @copyright 2011 Darryl Pogue
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_newsletter
+ * @copyright  2012 Darryl Pogue
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
-$string['blocktitle'] = 'Latest news';
-$string['configallowemail'] = 'Allow anyone to register for email notification';
-$string['dailynews'] = 'Daily news';
-$string['noletters'] = 'No newsletters have been published.';
-$string['pluginname'] = 'Newsletter';
-$string['readdaily'] = "Read today's news";
-$string['readlatest'] = 'Read the {$a} newsletter.';
+
+require_once("../../config.php");
+
+$id  = required_param('id', PARAM_INT);    // Daily News item ID
+
+if (!$daily = $DB->get_record('daily_news', array('id' => $id))) {
+    print_error('invalidcoursemodule');
+}
+
+$PAGE->set_url('/blocks/newsletter/daily.php', array('id'=>$id));
+
+require_login(SITEID);
+
+$PAGE->set_title(get_string('dailynews', 'block_newsletter'));
+$PAGE->set_heading(get_string('dailynews', 'block_newsletter'));
+$PAGE->set_pagelayout('popup');
+
+echo $OUTPUT->header();
+
+echo $daily->content;
+
+echo $OUTPUT->footer();

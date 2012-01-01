@@ -16,18 +16,29 @@
 
 /**
  * @package    tool
- * @subpackage newsletter
- * @copyright  2011 Darryl Pogue
+ * @subpackage dailynews
+ * @copyright  2012 Darryl Pogue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+define('NO_OUTPUT_BUFFERING', true);
 
-if ($ADMIN->locate('news') == NULL) {
-    $ADMIN->add('root', new admin_category('news', get_string('admincategory', 'tool_newsletter')));
-}
+require('../../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
 
-if ($hassiteconfig) {
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterview', get_string('toolnewsletterview', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/index.php'));
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterpost', get_string('toolnewsletterpost', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/post.php'));
+require_login();
+admin_externalpage_setup('tooldailynewsview');
+
+$systemcontext = get_context_instance(CONTEXT_SYSTEM);
+require_capability('tool/dailynews:viewall', $systemcontext);
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('tooldailynewsview', 'tool_dailynews'));
+//$form->display();
+$sql = 'SELECT * FROM {daily_news} ORDER BY datepublished DESC';
+$recs = $DB->get_records_sql($sql);
+
+foreach ($recs as $letter) {
+    echo strftime('(%F) %B %e, %Y', $letter->datepublished);
 }
+echo $OUTPUT->footer();

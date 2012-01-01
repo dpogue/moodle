@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="admin/tool/newsletter/db" VERSION="20111218" COMMENT="XMLDB file for Moodle admin/tool/dailynews"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="daily_news" COMMENT="Table to store daily news entries">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="datepublished"/>
+        <FIELD NAME="datepublished" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="content"/>
+        <FIELD NAME="content" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="datepublished" NEXT="contentformat" />
+        <FIELD NAME="contentformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="content" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
