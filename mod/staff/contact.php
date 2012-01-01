@@ -93,4 +93,4 @@ if(isloggedin() && !isguestuser())
 }
 $mform->display();
 
-$OUTPUT->footer();
+echo $OUTPUT->footer();
