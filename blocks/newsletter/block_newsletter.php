@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,9 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A block which displays Remote feeds
- *
- * @package    newsletter
+ * @package    block_newsletter
  * @copyright  2011 Darryl Pogue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
@@ -34,11 +31,11 @@
     }
 
     function applicable_formats() {
-        return array('all' => true);   // Needs work to make it work on tags MDL-11960
+        return array('all' => true);
     }
 
     function get_content() {
-        global $CFG, $DB;
+        global $CFG, $DB, $OUTPUT;
 
         if ($this->content !== NULL) {
             return $this->content;
@@ -57,7 +54,50 @@
          * Begin Normal Display of Block Content
          * --------------------------------- */
 
-        $output = 'Hello World';
+        $output = '';
+
+        if ($DB->get_manager()->table_exists('daily_news')) {
+            $today = strtotime("today");
+
+            $sql = 'SELECT * FROM {daily_news} WHERE datepublished = ?';
+            $daily = $DB->get_record_sql($sql, array($today));
+
+            if ($daily) {
+                $output .= '<p>';
+
+                $link = new moodle_url('/blocks/newsletter/daily.php', array('id' => $daily->id)); 
+                $action = new popup_action('click', $link);
+                $output .= $OUTPUT->action_link($link, get_string('readdaily', 'block_newsletter'), $action);
+
+                $output .= '</p>';
+            }
+        }
+
+        if ($DB->get_manager()->table_exists('newsletter')) {
+            if (!empty($output)) {
+                $output .= '<hr>';
+            }
+
+            $systemcontext = get_context_instance(CONTEXT_SYSTEM);
+            $sql = 'SELECT * FROM {newsletter} ORDER BY datepublished DESC LIMIT 0, 1';
+            $newsletter = $DB->get_record_sql($sql);
+
+            if ($newsletter) {
+                $fs = get_file_storage();
+                $files = $fs->get_area_files($systemcontext->id, 'block_newsletter', 'letters', $newsletter->id, "itemid", false);
+                if (count($files) < 1) {
+                    continue;
+                } else {
+                    $file = reset($files);
+                }
+
+                $url = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$systemcontext->id.'/block_newsletter/letters/'.$newsletter->id.'/'.$file->get_filename());
+
+                $output .= '<p>'.get_string('readlatest', 'block_newsletter', '<a href="'.$url.'">'.strftime('%B %Y', $newsletter->datepublished).'</a>').'</p>';
+            } else {
+                $output .= '<p>'.get_string('noletters', 'block_newsletter').'</p>';
+            }
+        }
 
         $this->content->text = $output;
 
@@ -86,7 +126,6 @@
      */
     function cron() {
         global $CFG, $DB;
-        require_once($CFG->libdir.'/simplepie/moodle_simplepie.php');
 
         // We are going to measure execution times
         $starttime =  microtime();

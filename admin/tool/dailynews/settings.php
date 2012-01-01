@@ -16,18 +16,18 @@
 
 /**
  * @package    tool
- * @subpackage newsletter
- * @copyright  2011 Darryl Pogue
+ * @subpackage dailynews
+ * @copyright  2012 Darryl Pogue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->locate('news') == NULL) {
-    $ADMIN->add('root', new admin_category('news', get_string('admincategory', 'tool_newsletter')));
+    $ADMIN->add('root', new admin_category('news', get_string('admincategory', 'tool_dailynews')));
 }
 
 if ($hassiteconfig) {
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterview', get_string('toolnewsletterview', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/index.php'));
-    $ADMIN->add('news', new admin_externalpage('toolnewsletterpost', get_string('toolnewsletterpost', 'tool_newsletter'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/newsletter/post.php'));
+    $ADMIN->add('news', new admin_externalpage('tooldailynewsview', get_string('tooldailynewsview', 'tool_dailynews'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/dailynews/index.php'));
+    $ADMIN->add('news', new admin_externalpage('tooldailynewspost', get_string('tooldailynewspost', 'tool_dailynews'), $CFG->wwwroot.'/'.$CFG->admin.'/tool/dailynews/post.php'));
 }
