@@ -23,6 +23,8 @@
 
 $string['admincategory'] = 'News Content';
 $string['content'] = 'News content';
+$string['couldnotdelete'] = 'Could not delete the news item.';
+$string['deleteconfirm'] = 'Do you really wish to delete this news item?';
 $string['pluginname'] = 'Daily News';
 $string['publish'] = 'Publish';
 $string['published'] = 'Publication date';

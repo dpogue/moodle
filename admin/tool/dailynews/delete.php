@@ -16,41 +16,42 @@
 
 /**
  * @package    tool
- * @subpackage newsletter
- * @copyright  2011 Darryl Pogue
+ * @subpackage dailynews
+ * @copyright  2012 Darryl Pogue
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('NO_OUTPUT_BUFFERING', true);
-
 require('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once('newsletter_post_form.php');
 
-require_login();
-admin_externalpage_setup('toolnewsletterpost');
+// retrieve parameters
+$newsid = required_param('id', PARAM_INT);
+
+$PAGE->set_url('/admin/tool/dailynews/delete.php', array('id'=>$newsid));
+
+require_login(SITEID);
 
 $systemcontext = get_context_instance(CONTEXT_SYSTEM);
-require_capability('tool/news:add', $systemcontext);
+require_capability('tool/dailynews:add', $systemcontext);
 
-// Create the form
-$form = new newsletter_post_form();
 
-// If we have valid input.
-if ($data = $form->get_data()) {
-    $letter = new stdClass();
-    $letter->datepublished = $data->datepublished;
+if (!$news = $DB->get_record('daily_news', array('id' => $newsid))) {
+    print_error('invalidid');
+}
 
-    $letter->id = $DB->insert_record("newsletter", $letter);
+if (data_submitted() && confirm_sesskey()) {
+//if data was submitted and is valid, then delete note
+    $returnurl = $CFG->wwwroot . '/admin/tool/dailynews/index.php';
 
-    file_save_draft_area_files($data->letter, $systemcontext->id, 'block_newsletter', 'letters', $letter->id);
+    if (!$DB->delete_records('daily_news', array('id' => $newsid))) {
+        print_error('couldnotdelete', 'tool_dailynews');
+    }
 
-    redirect(new moodle_url('index.php'));
+    redirect($returnurl);
 } else {
+    $optionsyes = array('id'=>$newsid, 'sesskey'=>sesskey());
 
-    // Otherwise display the settings form.
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('toolnewsletterpost', 'tool_newsletter'));
-    $form->display();
+    echo $OUTPUT->confirm(get_string('deleteconfirm', 'tool_dailynews'), new moodle_url('delete.php',$optionsyes),  new moodle_url('index.php'));
     echo $OUTPUT->footer();
 }

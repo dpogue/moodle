@@ -22,6 +22,8 @@
  */
 
 $string['admincategory'] = 'News Content';
+$string['couldnotdelete'] = 'Could not delete the newsletter';
+$string['deleteconfirm'] = 'Do you really wish to delete this newsletter?';
 $string['pluginname'] = 'Newsletters';
 $string['publish'] = 'Publish';
 $string['published'] = 'Publication date';

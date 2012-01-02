@@ -86,7 +86,7 @@
                 $fs = get_file_storage();
                 $files = $fs->get_area_files($systemcontext->id, 'block_newsletter', 'letters', $newsletter->id, "itemid", false);
                 if (count($files) < 1) {
-                    continue;
+                    /* Do nothing */
                 } else {
                     $file = reset($files);
                 }
