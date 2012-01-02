@@ -198,6 +198,10 @@ echo $OUTPUT->doctype() ?>
             load: '<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/flexie.min.js'
         });
     }
+    $('#page-site-index .forumpost .header').on('click', function(e) {
+        $('#page-site-index .forumpost .maincontent').slideUp();
+        $(e.currentTarget).next().slideDown('slow');
+    });
 <?php if ($PAGE->theme->settings->snow && date('m') == 12) { ?>
     $(document).snowfall({minSize: 3, maxSize: 5, round: true, flakeCount: 200});
 <?php } ?>
