@@ -25,8 +25,6 @@ define('NO_OUTPUT_BUFFERING', true);
 
 require('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-//require_once('locallib.php');
-//require_once('database_transfer_form.php');
 
 require_login();
 admin_externalpage_setup('toolnewsletterview');
@@ -40,6 +38,11 @@ echo $OUTPUT->heading(get_string('toolnewsletterview', 'tool_newsletter'));
 $sql = 'SELECT * FROM {newsletter} ORDER BY datepublished DESC';
 $recs = $DB->get_records_sql($sql);
 
+$table = new html_table();
+$table->data = array();
+$table->id = 'adminnewsletters';
+$table->head = array(get_string('published', 'tool_newsletter'), get_string('preview'), get_string('delete'));
+
 foreach ($recs as $letter) {
     $fs = get_file_storage();
     $files = $fs->get_area_files($systemcontext->id, 'block_newsletter', 'letters', $letter->id, "itemid", false);
@@ -51,8 +54,14 @@ foreach ($recs as $letter) {
 
     $url = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$systemcontext->id.'/block_newsletter/letters/'.$letter->id.'/'.$file->get_filename());
 
-    echo '<a href="'.$url.'">';
-    echo strftime('(%F) %B %e, %Y', $letter->datepublished);
-    echo '</a><br>';
+    $table->data[] = array(
+        strftime('(%F) %B %e, %Y', $letter->datepublished),
+        $OUTPUT->action_link($url, get_string('preview')),
+        $OUTPUT->action_link(new moodle_url('delete.php', array('id' => $letter->id)), get_string('delete'))
+    );
 }
+
+echo $OUTPUT->single_button(new moodle_url('post.php'), get_string('toolnewsletterpost', 'tool_newsletter'));
+echo '<br>';
+echo html_writer::table($table);
 echo $OUTPUT->footer();

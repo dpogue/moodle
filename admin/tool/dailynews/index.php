@@ -38,7 +38,21 @@ echo $OUTPUT->heading(get_string('tooldailynewsview', 'tool_dailynews'));
 $sql = 'SELECT * FROM {daily_news} ORDER BY datepublished DESC';
 $recs = $DB->get_records_sql($sql);
 
-foreach ($recs as $letter) {
-    echo strftime('(%F) %B %e, %Y', $letter->datepublished);
+$table = new html_table();
+$table->data = array();
+$table->id = 'adminnewsletters';
+$table->head = array(get_string('published', 'tool_dailynews'), get_string('preview'), get_string('edit'), get_string('delete'));
+
+foreach ($recs as $daily) {
+    $table->data[] = array(
+        strftime('(%F) %B %e, %Y', $daily->datepublished),
+        $OUTPUT->action_link(new moodle_url('/blocks/newsletter/daily.php', array('id' => $daily->id)), get_string('preview')),
+        get_string('edit'),
+        $OUTPUT->action_link(new moodle_url('delete.php', array('id' => $daily->id)), get_string('delete'))
+    );
 }
+
+echo $OUTPUT->single_button(new moodle_url('post.php'), get_string('tooldailynewspost', 'tool_dailynews'));
+echo '<br>';
+echo html_writer::table($table);
 echo $OUTPUT->footer();
