@@ -199,9 +199,12 @@ echo $OUTPUT->doctype() ?>
         });
     }
     $('#page-site-index .forumpost .header').on('click', function(e) {
-        $('#page-site-index .forumpost .maincontent').slideUp();
-        $(e.currentTarget).next().slideDown('slow');
+        if ($(e.currentTarget).next().css('display') == 'none') {
+            $('#page-site-index .forumpost .maincontent').slideUp();
+            $(e.currentTarget).next().slideDown('slow');
+        }
     });
+    $('#page-site-index .forumpost .author').append('<span style="float:right;font-style:italic;cursor:pointer;font-weight:bold;color:#333333;">Click to expand</span>');
 <?php if ($PAGE->theme->settings->snow && date('m') == 12) { ?>
     $(document).snowfall({minSize: 3, maxSize: 5, round: true, flakeCount: 200});
 <?php } ?>
