@@ -74,6 +74,7 @@ echo $OUTPUT->doctype() ?>
             <a href="<?php echo get_login_url(); ?>">Login</a>
         </li>
 <?php } ?>
+        <li class="motto">Seek Challenge and Experience Success</li>
     </ul>
 
 	<header>

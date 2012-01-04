@@ -27,6 +27,13 @@
     text-align: right;
 }
 
+#blackbar .motto {
+    text-align: center;
+    color: #cccccc;
+    font-weight: bold;
+    font-style: italic;
+}
+
 #blackbar li {
     display: block;
     margin: 0 1px;
