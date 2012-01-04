@@ -21,10 +21,10 @@
  * @copyright 2011 Darryl Pogue
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['blocktitle'] = 'Latest news';
+$string['blocktitle'] = 'Haney Happenings';
 $string['configallowemail'] = 'Allow anyone to register for email notification';
 $string['dailynews'] = 'Daily news';
 $string['noletters'] = 'No newsletters have been published.';
 $string['pluginname'] = 'Newsletter';
-$string['readdaily'] = "Read today's news";
+$string['readdaily'] = "Read today's Haney Happenings";
 $string['readlatest'] = 'Read the {$a} newsletter.';

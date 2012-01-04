@@ -75,6 +75,7 @@
     border-top: 0 none;
     padding: 5px;
     text-align: left;
+    z-index: 1;
 }
 
 #blackbar .open > div {
