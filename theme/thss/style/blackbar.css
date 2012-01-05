@@ -20,11 +20,13 @@
 #blackbar .left {
     float: left;
     text-align: left;
+    z-index: 1;
 }
 
 #blackbar .right {
     float: right;
     text-align: right;
+    z-index: 1;
 }
 
 #blackbar .motto {
