@@ -63,7 +63,7 @@ $mform = new staff_contact_form('contact.php');
 echo $OUTPUT->header();
     
     if ($fromform = $mform->get_data()) {
-        if (!email_to_user($user, $fromform->email, $fromform->subject, stripslashes($fromform->content))) {
+        if (!email_to_user($user, $fromform->email, $fromform->subject, stripslashes($fromform->content), '', '', true, $fromform->email, $fromform->email)) {
             print_error('emailfail');
             die;
         }
