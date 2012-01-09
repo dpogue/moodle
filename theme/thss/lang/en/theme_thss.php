@@ -30,3 +30,5 @@ $string['forumcolordesc'] = 'Set the font color of forum post subject.';
 $string['snow'] = 'snow';
 $string['snowdesc'] = 'Turns on falling snow during the month of December.';
 
+$string['ga'] = 'ga';
+$string['gadesc'] = 'Google Analytics';

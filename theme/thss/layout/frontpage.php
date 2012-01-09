@@ -59,6 +59,9 @@ echo $OUTPUT->doctype() ?>
         </li>
 <?php if (isloggedin()) { ?>
         <li class="right">
+            <a href="<?php echo $CFG->wwwroot.'/login/logout.php'; ?>">Logout</a>
+        </li>
+        <li class="right">
 <?php $notify_count = message_count_unread_messages($USER); ?>
             <a class="popup" title="Notifications"><b class="notify<?php echo $notify_count === 0 ? '' : '-unread'; ?>"><?php echo $notify_count; ?></b></a>
             <div>
@@ -209,7 +212,17 @@ echo $OUTPUT->doctype() ?>
 <?php if ($PAGE->theme->settings->snow && date('m') == 12) { ?>
     $(document).snowfall({minSize: 3, maxSize: 5, round: true, flakeCount: 200});
 <?php } ?>
+<?php if (!empty($PAGE->theme->settings->ga)) { ?>
+    var _gaq=[['_setAccount','<?php echo $PAGE->theme->settings->ga; ?>'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+<?php } ?>
 </script>
 <?php echo $OUTPUT->standard_end_of_body_html() ?>
+<!--[if lt IE 8 ]>
+    <script defer src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script defer>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+<![endif]-->
 </body>
 </html>
