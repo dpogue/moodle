@@ -88,7 +88,8 @@ echo $OUTPUT->doctype() ?>
 <!--[if lt IE 9]>
             <object width="290" height="130">
                 <param name="movie" value="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" />
-                <embed src="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" type="application/x-shockwave-flash" width="290" height="130" />
+                <param name="wmode" value="transparent" />
+                <embed src="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" type="application/x-shockwave-flash" width="290" height="130" wmode="transparent" />
             </object>
 <![endif]--><!--[if gte IE 9]><!-->
             <svg height="100px" width="64px" viewBox="0 0 64 100" preserveAspectRatio="xMidYMid meet">
