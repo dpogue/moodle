@@ -134,7 +134,7 @@ echo $OUTPUT->doctype() ?>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script>
-    if (!Modernizr.flexbox && $('#page-mod-resource-view').length > 0) {
+    if (!Modernizr.flexbox && $('#page-mod-resource-view').length == 0) {
         Modernizr.load({
             load: '<?php echo $CFG->wwwroot; ?>/theme/thss/javascript/flexie.min.js'
         });
