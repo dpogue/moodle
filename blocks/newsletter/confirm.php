@@ -15,14 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool
- * @subpackage newsletter
+ * @package    block_newsletter
  * @copyright  2011 Darryl Pogue
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
 
-defined('MOODLE_INTERNAL') || die();
+require('../../config.php');
 
-$plugin->version   = 2012012200; // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2011092100; // Requires this Moodle version
-$plugin->component = 'tool_newsletter'; // Full name of the plugin (used for diagnostics)
+$secret = required_param('confirm', PARAM_TEXT);
+
+if (!$row = $DB->get_record('newsletter_email', array('secret' => $secret))) {
+    print_error(get_string('wrongtoken', 'block_newsletter'));
+}
+
+$row->confirm = true;
+
+if (!$DB->update_record('newsletter_email', $row)) {
+    print_error(get_string('wrongtoken', 'block_newsletter'));
+}
+
+redirect($CFG->wwwroot);

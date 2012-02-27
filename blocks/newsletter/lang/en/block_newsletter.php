@@ -28,3 +28,4 @@ $string['noletters'] = 'No newsletters have been published.';
 $string['pluginname'] = 'Newsletter';
 $string['readdaily'] = "Read today's news";
 $string['readlatest'] = 'Read the {$a} newsletter.';
+$string['wrongtoken'] = 'The registration failed. Please try again.';
