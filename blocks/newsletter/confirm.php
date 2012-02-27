@@ -15,17 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_newsletter', language 'en', branch 'MOODLE_22_STABLE'
- *
- * @package   block_newsletter
- * @copyright 2011 Darryl Pogue
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_newsletter
+ * @copyright  2011 Darryl Pogue
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
-$string['blocktitle'] = 'Haney Happenings';
-$string['configallowemail'] = 'Allow anyone to register for email notification';
-$string['dailynews'] = 'Daily news';
-$string['noletters'] = 'No newsletters have been published.';
-$string['pluginname'] = 'Newsletter';
-$string['readdaily'] = "Read today's Haney Happenings";
-$string['readlatest'] = 'Read the {$a} newsletter.';
-$string['wrongtoken'] = 'The registration failed. Please try again.';
+
+require('../../config.php');
+
+$secret = required_param('confirm', PARAM_TEXT);
+
+if (!$row = $DB->get_record('newsletter_email', array('secret' => $secret))) {
+    print_error(get_string('wrongtoken', 'block_newsletter'));
+}
+
+$row->confirm = true;
+
+if (!$DB->update_record('newsletter_email', $row)) {
+    print_error(get_string('wrongtoken', 'block_newsletter'));
+}
+
+redirect($CFG->wwwroot);
