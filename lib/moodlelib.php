@@ -1316,7 +1316,7 @@ function get_config($plugin, $name = NULL) {
         if ($localcfg) {
             return (object)$localcfg;
         } else {
-            return null;
+            return new stdClass();
         }
 
     } else {
@@ -2214,7 +2214,7 @@ function get_timezone_record($timezonename) {
     }
 
     return $cache[$timezonename] = $DB->get_record_sql('SELECT * FROM {timezone}
-                                                        WHERE name = ? ORDER BY year DESC', array($timezonename), true);
+                                                        WHERE name = ? ORDER BY year DESC', array($timezonename), IGNORE_MULTIPLE);
 }
 
 /**
@@ -2740,6 +2740,10 @@ function require_login($courseorid = NULL, $autologinguest = true, $cm = NULL, $
                 if ($preventredirect) {
                     throw new require_login_exception('Course is hidden');
                 }
+                // We need to override the navigation URL as the course won't have
+                // been added to the navigation and thus the navigation will mess up
+                // when trying to find it.
+                navigation_node::override_active_url(new moodle_url('/'));
                 notice(get_string('coursehidden'), $CFG->wwwroot .'/');
             }
         }
@@ -3774,6 +3778,12 @@ function delete_user($user) {
 
     // last course access not necessary either
     $DB->delete_records('user_lastaccess', array('userid'=>$user->id));
+
+    // remove all user tokens
+    $DB->delete_records('external_tokens', array('userid'=>$user->id));
+
+    // unauthorise the user for all services
+    $DB->delete_records('external_services_users', array('userid'=>$user->id));
 
     // force logout - may fail if file based sessions used, sorry
     session_kill_user($user->id);
@@ -5022,6 +5032,17 @@ function email_to_user($user, $from, $subject, $messagetext, $messagehtml='', $a
     // skip mail to suspended users
     if ((isset($user->auth) && $user->auth=='nologin') or (isset($user->suspended) && $user->suspended)) {
         return true;
+    }
+
+    if (!validate_email($user->email)) {
+        // we can not send emails to invalid addresses - it might create security issue or confuse the mailer
+        $invalidemail = "User $user->id (".fullname($user).") email ($user->email) is invalid! Not sending.";
+        error_log($invalidemail);
+        if (CLI_SCRIPT) {
+            // do not print this in standard web pages
+            mtrace($invalidemail);
+        }
+        return false;
     }
 
     if (over_bounce_threshold($user)) {
@@ -7477,7 +7498,6 @@ function get_core_subsystems() {
             'license'     => NULL,
             'mathslib'    => NULL,
             'message'     => 'message',
-            'message'     => 'message',
             'mimetypes'   => NULL,
             'mnet'        => 'mnet',
             'moodle.org'  => NULL, // the dot is nasty, watch out! should be renamed to moodleorg
@@ -7812,7 +7832,7 @@ function plugin_callback($type, $name, $feature, $action, $params = null, $defau
  * @return mixed
  */
 function component_callback($component, $function, array $params = array(), $default = null) {
-    global $CFG; // this is needed for require_once() bellow
+    global $CFG; // this is needed for require_once() below
 
     $cleancomponent = clean_param($component, PARAM_COMPONENT);
     if (empty($cleancomponent)) {
@@ -8191,7 +8211,8 @@ function get_device_type() {
          return 'tablet';
     }
 
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.') !== false) {
+    // Safe way to check for IE6 and not get false positives for some IE 7/8 users
+    if (substr($_SERVER['HTTP_USER_AGENT'], 0, 34) === 'Mozilla/4.0 (compatible; MSIE 6.0;') {
         return 'legacy';
     }
 
