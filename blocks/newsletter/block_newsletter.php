@@ -99,6 +99,26 @@
             }
         }
 
+
+        if ($DB->get_manager()->table_exists('newsletter_email') && !isloggedin()) {
+            if (!empty($output)) {
+                $output .= '<hr>';
+            }
+
+            $output .= '<p>';
+            $output .= 'Register for newsletter email notifications:';
+            $output .= '</p>';
+
+            $action = new moodle_url('/blocks/newsletter/subscribe.php');
+            $output .= '<form action="'.$action.'" method="POST">';
+            $output .= '<p>';
+            $output .= '<input type="email" name="email">';
+            $output .= '<br>';
+            $output .= '<input type="submit" value="Register">';
+            $output .= '</p>';
+            $output .= '</form>';
+        }
+
         $this->content->text = $output;
 
         return $this->content;

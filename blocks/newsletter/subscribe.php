@@ -25,6 +25,9 @@ require('locallib.php');
 
 $email = required_param('email', PARAM_EMAIL);
 
+$PAGE->set_url('/blocks/newsletter/subscribe.php', array('email' => $email));
+$PAGE->set_course($SITE);
+
 if ($DB->get_record('newsletter_email', array('email' => $email))) {
     print_error('emailexists');
 }
@@ -39,9 +42,11 @@ if (!$DB->insert_record('newsletter_email', $data)) {
 }
 
 $text = subscription_verification_text($data);
-echo $text;
 if (!email_to_address($email, null, 'THSS Newsletter Registration', $text)) {
     print_error('Failed to send email verification');
 }
 
-redirect($CFG->wwwroot);
+echo $OUTPUT->header();
+echo $OUTPUT->notification('Please check your email for a confirmation link', 'notifysuccess');
+echo $OUTPUT->continue_button($CFG->wwwroot);
+echo $OUTPUT->footer();

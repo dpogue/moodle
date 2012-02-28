@@ -24,6 +24,9 @@ require('../../config.php');
 
 $secret = required_param('confirm', PARAM_TEXT);
 
+$PAGE->set_url('/blocks/newsletter/confirm.php', array('confirm' => $secret));
+$PAGE->set_course($SITE);
+
 if (!$row = $DB->get_record('newsletter_email', array('secret' => $secret))) {
     print_error(get_string('wrongtoken', 'block_newsletter'));
 }
@@ -34,4 +37,7 @@ if (!$DB->update_record('newsletter_email', $row)) {
     print_error(get_string('wrongtoken', 'block_newsletter'));
 }
 
-redirect($CFG->wwwroot);
+echo $OUTPUT->header();
+echo $OUTPUT->notification('You will now receive email notifications when newsletters are published.', 'notifysuccess');
+echo $OUTPUT->continue_button($CFG->wwwroot);
+echo $OUTPUT->footer();
