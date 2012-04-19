@@ -59,8 +59,8 @@
         if ($DB->get_manager()->table_exists('daily_news')) {
             $today = strtotime("today");
 
-            $sql = 'SELECT * FROM {daily_news} WHERE datepublished = ?';
-            $daily = $DB->get_record_sql($sql, array($today));
+            $sql = 'SELECT * FROM {daily_news} WHERE DATE(FROM_UNIXTIME(datepublished)) = CURDATE()';
+            $daily = $DB->get_record_sql($sql);
 
             if ($daily) {
                 $output .= '<p>';
