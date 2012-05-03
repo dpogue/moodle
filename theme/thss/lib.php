@@ -144,3 +144,14 @@ function thss_set_forumcolor($css, $forumcolor) {
     $css = str_replace($tag, $replacement, $css);
     return $css;
 }
+
+function thss_get_daily_news() {
+    global $DB;
+
+    if ($DB->get_manager()->table_exists('daily_news')) {
+        $sql = 'SELECT * FROM {daily_news} WHERE DATE(FROM_UNIXTIME(datepublished)) = CURDATE()';
+        return $DB->get_record_sql($sql);
+    }
+
+    return null;
+}

@@ -19,7 +19,8 @@ if ($hascustommenu) {
     $bodyclasses[] = 'has_custom_menu';
 }
 
-    
+$daily = thss_get_daily_news();
+
 echo $OUTPUT->doctype() ?>
 <!--[if IE 8]> <html class="ie8"<?php echo $OUTPUT->htmlattributes(); ?>> <![endif]-->
 <!--[if gt IE 8]><!--> <html<?php echo $OUTPUT->htmlattributes() ?>> <!--<![endif]-->
@@ -85,34 +86,14 @@ echo $OUTPUT->doctype() ?>
             <?php echo $custommenu; ?>
         </nav>
         <div id="banners">
-<!--[if lt IE 9]>
-            <object width="290" height="130">
-                <param name="movie" value="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" />
-                <param name="wmode" value="transparent" />
-                <embed src="http://www.wunderground.com/swf/pws_mini_rf_nc.swf?station=IBCMAPLE3&freq=2.5&units=metric&lang=EN" type="application/x-shockwave-flash" width="290" height="130" wmode="transparent" />
-            </object>
-<![endif]--><!--[if gte IE 9]><!-->
-            <svg height="100px" width="64px" viewBox="0 0 64 100" preserveAspectRatio="xMidYMid meet">
-                <g>
-                    <text text-anchor="middle" dominant-baseline="middle" x="32" y="5" font-weight="bold">Wind:</text>
-                    <text id="windspeed" text-anchor="middle" dominant-baseline="middle" x="32" y="20">&mdash; km/h</text>
-                    <circle cx="32" cy="64" r="30" fill="#dddddd" />
-                    <text id="winddir" text-anchor="middle" dominant-baseline="middle" x="32" y="64">&hellip;</text>
-                    <g id="winddirrot" transform="rotate(0, 32, 64)">
-                        <polygon points="32,40 25,32 39,32" fill="#800000" />
-                    </g>
-                </g>
-            </svg>
-            <h3>Current Conditions</h3>
-            <span>Temperature:</span>           <b id="temperature">&mdash; &deg;C</b><br><br>
-            <span>Relative Humidity:</span>     <b id="humidity">&mdash;%</b><br>
-            <span>Daily Precipitation:</span>   <b id="precip_daily">&mdash; cm</b><br>
-            <span>Hourly Precipitation:</span>  <b id="precip_hourly">&mdash; mm</b><br>
-            <span>Air Pressure:</span>          <b id="pressure">&mdash; mb</b><br>
-            <span>UV Index:</span>              <b id="uv_index">&mdash;</b><br>
-            <span>Dewpoint:</span>              <b id="dewpoint">&mdash; &deg;C</b><br><br>
-<!--<![endif]-->
-            <a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IBCMAPLE3">Weather data is available on Wunderground &raquo;</a>
+<?php if ($daily) {
+        $link = new moodle_url('/blocks/newsletter/daily.php', array('id' => $daily->id));
+        $action = new popup_action('click', $link);
+?>
+            <p class="happenings">
+                <?php echo $OUTPUT->action_link($link, get_string('readdaily', 'block_newsletter'), $action); ?>
+            </p>
+<?php } ?>
         </div>
 		<div id="slideshow">
 <?php

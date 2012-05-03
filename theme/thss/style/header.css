@@ -195,6 +195,22 @@ body>header nav {
     text-align: center;
 }
 
+#banners .happenings {
+    text-align: center;
+    line-height: 201px;
+    height: 201px;
+}
+
+#banners .happenings a {
+    display: inline-block;
+    font-size: 16px;
+    width: 260px;
+    height: 60px;
+    line-height: 60px;
+    background: #CBDCF3;
+    border-radius: 7px;
+}
+
 
 /* Slideshow area */
 #slideshow {
